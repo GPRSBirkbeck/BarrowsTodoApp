@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "tech.gregbuilds.gsfulltemplate"
+    namespace = "tech.gregbuilds.barrowstodoapp"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "tech.gregbuilds.gsfulltemplate"
+        applicationId = "tech.gregbuilds.barrowstodoapp"
         minSdk = 28
         targetSdk = 34
         versionCode = 1

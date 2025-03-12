@@ -3,7 +3,6 @@ package tech.gregbuilds.barrowstodoapp.model
 import androidx.compose.material.icons.Icons
 import java.util.Date
 
-//TODO update with correct DTO
 data class TodoItemDTO(
     val id: Int,
     val title: String,
