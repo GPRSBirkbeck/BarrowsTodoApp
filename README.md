@@ -29,8 +29,8 @@ Extended functionality:
 The first todo, is to actually break the task down into steps.
 "Basics" steps:
 1. Creating to-do items (details screen)
-   1. Create the database, DAO and model. 
-   2. Then, setup my repository and module to allow repository and DB injections.
+   1. Create the database, DAO and model. Check!
+   2. Then, setup my repository and module to allow repository and DB injections. Check!
    3. Next, add a "Create Todo" button.
    4. Create a screen that has inputs for text inputs, deadline selector, and icon selector - the date should use a date picker - and not some input field.
    5. Add a "Create" button that saves the item when clicked and navigates us back to the list.
@@ -38,6 +38,7 @@ The first todo, is to actually break the task down into steps.
    1. Create composable for to-do item
    2. load to-do items from DB.
    3. make icon red for a to-do item has passed its deadline (play around and see what I like the look of most)
+   4. add a days until due subtitle
 3. Update to-do items
    1. Make the to-do items clickable.
    2. Upon clicking, reuse the creation screen, and allow the user to update the fields
@@ -60,6 +61,7 @@ The first todo, is to actually break the task down into steps.
       6. How's my unidirectional data flow?
       7. Check out the AppNavHost one more time.
       8. Check out my use of todo vs. To-do vs Todo naming conventions - I imagine there will be a case or two where these aren't aligned.
+      9. Think about renaming it all to task - not Todo - as this might be simpler - have a think.
    3. review gradle - do I have any unneeded dependencies?
    4. Add instructions on how to use this app into this README (also check for punctuation - I don't care if I end lines with dots, just make it consistent). 
    5. Add a datastore of test/dummy data for the assessor to use - I think for this, maybe just have a button they can click to populate the list. Hide the button if the list is not empty.

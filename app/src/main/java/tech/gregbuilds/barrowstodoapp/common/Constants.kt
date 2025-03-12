@@ -1,5 +1,6 @@
 package tech.gregbuilds.barrowstodoapp.common
 
 object Constants {
-    //TODO see if we need any common constants. None spring to mind yet.
+    const val DATABASE_NAME = "todo_database"
+    const val DATE_PATTERN = "MMMM dd, yyyy"
 }

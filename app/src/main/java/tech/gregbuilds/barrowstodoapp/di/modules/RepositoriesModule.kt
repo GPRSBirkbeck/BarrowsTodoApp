@@ -1,19 +1,20 @@
 package tech.gregbuilds.barrowstodoapp.di.modules
 
+import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import tech.gregbuilds.barrowstodoapp.data.repositories.TodoRepository
+import tech.gregbuilds.barrowstodoapp.data.repositories.TodoRepositoryImpl
+import javax.inject.Singleton
 
-@ExperimentalCoroutinesApi
 @Module
 @InstallIn(SingletonComponent::class)
-object RepositoriesModule {
+abstract class RepositoriesModule {
 
-    //TODO Think about what I want my Repository to look like and do - this needs to interact with my Room database.
-//    @Singleton
-//    @Provides
-//     fun provideTodoRepository(
-//        api: TodoApi
-//    ): TodoRepository = TodoRepository(api)
+    @Binds
+    @Singleton
+    abstract fun bindTodoRepository(
+        todoRepositoryImpl: TodoRepositoryImpl
+    ): TodoRepository
 }

@@ -75,8 +75,10 @@ dependencies {
     implementation(libs.logging.interceptor)
 
     // Room database
+    kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.common)
+    implementation(libs.androidx.room.runtime)
 
     // Add Hilt dependencies
     kapt(libs.hilt.compiler)

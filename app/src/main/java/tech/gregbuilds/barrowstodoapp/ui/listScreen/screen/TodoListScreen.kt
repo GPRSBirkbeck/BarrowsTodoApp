@@ -6,16 +6,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import tech.gregbuilds.barrowstodoapp.ui.listScreen.viewModel.TodoViewModel
 
 @Composable
 fun TodoListScreen(
-    viewModel: TodoViewModel = viewModel(),
+    viewModel: TodoViewModel,
     modifier: Modifier = Modifier
 ) {
     // TODO: migrate to constraintLayouts
-
     val todoItems = viewModel.todoItems.collectAsState()
     LazyColumn(
         modifier = modifier.fillMaxSize()
