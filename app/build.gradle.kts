@@ -61,7 +61,7 @@ dependencies {
     implementation(libs.androidx.material)
     implementation(libs.androidx.material3)
 
-    // Material Icons
+    // Material Icons //TODO think about removing and going fully to material3 icons.
     implementation(libs.androidx.material.icons.core)
     implementation(libs.androidx.material.icons.extended)
 
@@ -73,6 +73,10 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.converter.moshi)
     implementation(libs.logging.interceptor)
+
+    // Room database
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.common)
 
     // Add Hilt dependencies
     kapt(libs.hilt.compiler)
