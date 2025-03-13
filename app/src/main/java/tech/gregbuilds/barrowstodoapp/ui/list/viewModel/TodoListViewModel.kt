@@ -1,4 +1,4 @@
-package tech.gregbuilds.barrowstodoapp.ui.listScreen.viewModel
+package tech.gregbuilds.barrowstodoapp.ui.list.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,35 +8,37 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import tech.gregbuilds.barrowstodoapp.data.repositories.TodoRepositoryImpl
-import tech.gregbuilds.barrowstodoapp.model.TodoItem
-import tech.gregbuilds.barrowstodoapp.ui.listScreen.state.TodoListUiState
+import tech.gregbuilds.barrowstodoapp.ui.list.state.TodoListUiState
 import javax.inject.Inject
 
 //TODO think about whether I need a baseViewModel or not.
 @HiltViewModel
-class TodoViewModel @Inject constructor(
-//    private val state: TodoListUiState(), //TODO think about state handling.
+class TodoListViewModel @Inject constructor(
     private val todoRepository: TodoRepositoryImpl
 ) : ViewModel() {
 
-    //TODO clean up my state and how I update it.
-    private val _uiState = MutableStateFlow(TodoListUiState())
+    private val _uiState = MutableStateFlow<TodoListUiState>(TodoListUiState.Loading)
     val uiState: StateFlow<TodoListUiState> get() = _uiState.asStateFlow()
-
-    private val _todoItems = MutableStateFlow<List<TodoItem>>(emptyList())
-    val todoItems: StateFlow<List<TodoItem>> get() = _todoItems.asStateFlow()
 
     init {
         getTodoItems()
     }
-
-    private fun updateItem() {}
 
     //TODO nice to have - is a bonus
     private fun swipeToDeleteItem() {}
 
     private fun getTodoItems() {
         viewModelScope.launch {
+            try {
+                val items = todoRepository.getTodoItems()
+                if (items.isEmpty()) {
+                    _uiState.value = TodoListUiState.Empty
+                } else {
+                    _uiState.value = TodoListUiState.Success(items)
+                }
+            } catch (e: Exception) {
+                _uiState.value = TodoListUiState.Failed("Failed to load items: ${e.message}")
+            }
         }
     }
 }

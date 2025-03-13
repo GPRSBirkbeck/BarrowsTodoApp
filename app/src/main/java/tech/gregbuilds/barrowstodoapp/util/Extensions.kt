@@ -9,8 +9,9 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 
+//This extension function could equally live in the model directory.
 fun TodoItemEntity.toTodoItemUi(dateFormatterService: DateFormatterService): TodoItem {
-    val dueDate = Instant.ofEpochMilli(dueDate)
+    val dueDate = Instant.ofEpochMilli(dueDateLong)
         .atZone(ZoneId.systemDefault())
         .toLocalDate()
 
@@ -19,8 +20,9 @@ fun TodoItemEntity.toTodoItemUi(dateFormatterService: DateFormatterService): Tod
 
     return TodoItem(
         id = id,
-        title = title,
         body = body,
+        title = title,
+        dueDate = dueDateLong,
         isCompleted = completed,
         daysUntilDue = daysUntilDue,
         dueDateString = formattedDate,

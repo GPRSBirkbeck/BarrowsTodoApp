@@ -8,6 +8,9 @@ Store all of the data locally.
 ## Instructions on how to use this project.
 TODO: Populate this when "Basics" are complete, and again when "Extended functionality" is complete.
 
+## Some architectural notes
+This is a single-activity architected app, using a navigation component to navigate between screens.
+
 ## Task Specifications
 Basics:
 1. A user must be able to view, add, edit and delete to-do entries.
@@ -31,7 +34,7 @@ The first todo, is to actually break the task down into steps.
 1. Creating to-do items (details screen)
    1. Create the database, DAO and model. Check!
    2. Then, setup my repository and module to allow repository and DB injections. Check!
-   3. Next, add a "Create Todo" button.
+   3. Next, add a "Create Todo" button. Check!
    4. Create a screen that has inputs for text inputs, deadline selector, and icon selector - the date should use a date picker - and not some input field.
    5. Add a "Create" button that saves the item when clicked and navigates us back to the list.
 2. Displaying to-do items (home screen)
@@ -62,11 +65,13 @@ The first todo, is to actually break the task down into steps.
       7. Check out the AppNavHost one more time.
       8. Check out my use of todo vs. To-do vs Todo naming conventions - I imagine there will be a case or two where these aren't aligned.
       9. Think about renaming it all to task - not Todo - as this might be simpler - have a think.
-   3. review gradle - do I have any unneeded dependencies?
-   4. Add instructions on how to use this app into this README (also check for punctuation - I don't care if I end lines with dots, just make it consistent). 
-   5. Add a datastore of test/dummy data for the assessor to use - I think for this, maybe just have a button they can click to populate the list. Hide the button if the list is not empty.
-   6. Reread the instructions one more time, did I do what they asked for?
-   7. Make it clear in commit history now that basics are complete.
+   3. Think about the domain layer one more time
+   4. review gradle - do I have any unneeded dependencies?
+   5. Add instructions on how to use this app into this README (also check for punctuation - I don't care if I end lines with dots, just make it consistent). 
+   6. Add a datastore of test/dummy data for the assessor to use - I think for this, maybe just have a button they can click to populate the list. Hide the button if the list is not empty.
+   7. Reread the instructions one more time, did I do what they asked for?
+   8. Check threading one more time
+   9. Make it clear in commit history now that basics are complete.
 
 "Extended" steps:
 1. Search through all the titles of their to-dos

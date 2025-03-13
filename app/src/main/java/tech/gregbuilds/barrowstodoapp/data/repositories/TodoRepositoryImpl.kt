@@ -1,5 +1,7 @@
 package tech.gregbuilds.barrowstodoapp.data.repositories
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import tech.gregbuilds.barrowstodoapp.data.dao.TodoDao
 import tech.gregbuilds.barrowstodoapp.data.model.TodoItemEntity
 import tech.gregbuilds.barrowstodoapp.model.TodoItem
@@ -19,24 +21,35 @@ class TodoRepositoryImpl @Inject constructor(
 ) : TodoRepository {
 
      override suspend fun getTodoItems(): List<TodoItem> {
-        return todoDao.getTodoItems().map { entity ->
-            entity.toTodoItemUi(dateFormatterService)
+        return withContext(Dispatchers.IO) {
+            todoDao.getTodoItems().map { entity ->
+                entity.toTodoItemUi(dateFormatterService)
+            }
         }
     }
 
+    // As is best practice - the repository is responsible for mapping the entity to the UI model.
      override suspend fun getTodoItemById(id: Int): TodoItem {
-        return todoDao.getTodoItemById(id).toTodoItemUi(dateFormatterService)
+        return withContext(Dispatchers.IO) {
+            todoDao.getTodoItemById(id).toTodoItemUi(dateFormatterService)
+        }
     }
 
      override suspend fun updateTodoItem(todoItemEntity: TodoItemEntity) {
-        todoDao.updateTodoItem(todoItemEntity)
+         withContext(Dispatchers.IO) {
+             todoDao.updateTodoItem(todoItemEntity)
+         }
     }
 
      override suspend fun insertTodoItem(todoItemEntity: TodoItemEntity) {
-        todoDao.insertTodoItem(todoItemEntity)
+         withContext(Dispatchers.IO) {
+             todoDao.insertTodoItem(todoItemEntity)
+         }
     }
 
      override suspend fun deleteTodoItem(todoItemEntity: TodoItemEntity) {
-        todoDao.deleteTodoItem(todoItemEntity)
+         withContext(Dispatchers.IO) {
+             todoDao.deleteTodoItem(todoItemEntity)
+         }
     }
 }

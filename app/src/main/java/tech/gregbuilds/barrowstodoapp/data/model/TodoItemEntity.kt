@@ -9,7 +9,7 @@ data class TodoItemEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo(name = "body") val body: String,
     @ColumnInfo(name = "title") val title: String,
-    @ColumnInfo(name = "due_date") val dueDate: Long,
+    @ColumnInfo(name = "due_date") val dueDateLong: Long,
     @ColumnInfo(name = "completed") val completed: Boolean,
     @ColumnInfo(name = "icon_identifier") val iconIdentifier: String
 )
