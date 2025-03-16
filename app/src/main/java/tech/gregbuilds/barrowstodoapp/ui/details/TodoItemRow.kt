@@ -1,5 +1,6 @@
 package tech.gregbuilds.barrowstodoapp.ui.details
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
@@ -19,9 +20,11 @@ import tech.gregbuilds.barrowstodoapp.model.TodoItem
 @Composable
 fun TodoItemRow(
     item: TodoItem,
-    modifier: Modifier) {
+    modifier: Modifier,
+    onClick: () -> Unit = {}
+) {
     ConstraintLayout(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth().clickable { onClick.invoke() }
     ) {
         val (icon, title, body, dueDate, daysUntilDue) = createRefs()
         createVerticalChain(title, body, dueDate, chainStyle = androidx.constraintlayout.compose.ChainStyle.Packed)

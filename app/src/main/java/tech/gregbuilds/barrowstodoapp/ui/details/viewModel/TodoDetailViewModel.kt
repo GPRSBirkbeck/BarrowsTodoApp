@@ -64,6 +64,7 @@ class TodoDetailViewModel @Inject constructor(private val todoRepository: TodoRe
                 _title.value = todoItem.title
                 _body.value = todoItem.body
                 _selectedDate.value = todoItem.dueDate
+                _dueDateString.value = todoItem.dueDateString
                 _uiState.value = TodoDetailsUiState.Success(todoItem)
                 _selectedIcon.value = TodoIconIdentifier.fromIdentifier(todoItem.iconIdentifier)
             }

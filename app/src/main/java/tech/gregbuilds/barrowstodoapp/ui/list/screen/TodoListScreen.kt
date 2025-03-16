@@ -124,7 +124,8 @@ fun TodoListScreen(
                             item {
                                 TodoItemRow(
                                     item = it,
-                                    modifier = Modifier.padding(16.dp)
+                                    modifier = Modifier.padding(16.dp),
+                                    onClick = { onItemClicked(it.id) }
                                 )
                             }
                         }
