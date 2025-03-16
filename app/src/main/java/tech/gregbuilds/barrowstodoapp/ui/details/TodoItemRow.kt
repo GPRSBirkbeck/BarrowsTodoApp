@@ -12,6 +12,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import tech.gregbuilds.barrowstodoapp.model.TodoIconIdentifier
 import tech.gregbuilds.barrowstodoapp.model.TodoItem
 
 @Composable
@@ -22,10 +23,10 @@ fun TodoItemRow(
         modifier = modifier.fillMaxWidth()
     ) {
         val (icon, title, body, dueDate, daysUntilDue) = createRefs()
-        val textChain = createVerticalChain(title, body, dueDate, chainStyle = androidx.constraintlayout.compose.ChainStyle.Packed)
+        createVerticalChain(title, body, dueDate, chainStyle = androidx.constraintlayout.compose.ChainStyle.Packed)
 
         Icon(
-            imageVector = item.icon,
+            imageVector = TodoIconIdentifier.fromIdentifier(item.iconIdentifier).icon,
             contentDescription = "Todo Item Icon",
             modifier = Modifier
                 .size(32.dp)

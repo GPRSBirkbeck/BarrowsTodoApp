@@ -25,8 +25,8 @@ fun TodoItemEntity.toTodoItemUi(): TodoItem {
         isCompleted = completed,
         daysUntilDue = daysUntilDue,
         dueDateString = dueDateString,
-        daysUntilDueDisplay = daysUntilDue.daysUntilDueDisplay(),
-        icon = TodoIconIdentifier.fromIdentifier(iconIdentifier).icon
+        iconIdentifier = iconIdentifier,
+        daysUntilDueDisplay = daysUntilDue.daysUntilDueDisplay()
     )
 }
 
@@ -42,11 +42,11 @@ fun Int.daysUntilDueDisplay(): String {
 // Extension function to convert TodoItem to TodoItemEntity
 fun TodoItem.toTodoItemEntity(): TodoItemEntity {
     return TodoItemEntity(
-        title = this.title,
         body = this.body,
-        completed = this.isCompleted,
+        title = this.title,
         dueDateLong = this.dueDate,
+        completed = this.isCompleted,
         dueDateString = this.dueDateString,
-        iconIdentifier = this.icon.name
+        iconIdentifier = this.iconIdentifier
     )
 }

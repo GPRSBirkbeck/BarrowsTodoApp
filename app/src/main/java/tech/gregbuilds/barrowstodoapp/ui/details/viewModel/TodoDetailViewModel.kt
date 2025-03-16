@@ -63,9 +63,9 @@ class TodoDetailViewModel @Inject constructor(private val todoRepository: TodoRe
                 val todoItem = todoRepository.getTodoItemById(todoId)
                 _title.value = todoItem.title
                 _body.value = todoItem.body
-                _selectedIcon.value = TodoIconIdentifier.fromImageVector(todoItem.icon)
                 _selectedDate.value = todoItem.dueDate
                 _uiState.value = TodoDetailsUiState.Success(todoItem)
+                _selectedIcon.value = TodoIconIdentifier.fromIdentifier(todoItem.iconIdentifier)
             }
             updateSaveEnabled()
         }
@@ -95,7 +95,10 @@ class TodoDetailViewModel @Inject constructor(private val todoRepository: TodoRe
     }
 
     private fun updateSaveEnabled() {
-        _isSaveEnabled.value = _title.value.isNotBlank() && _body.value.isNotBlank() && _selectedDate.value != null
+        _isSaveEnabled.value =
+            _title.value.isNotBlank()
+                    && _body.value.isNotBlank()
+                    && _selectedDate.value != null
     }
 
     //TODO add use cases
@@ -103,14 +106,14 @@ class TodoDetailViewModel @Inject constructor(private val todoRepository: TodoRe
         viewModelScope.launch {
             val todoItem = TodoItem(
                 id = todoId ?: 0,
-                title = title.value,
                 body = body.value,
+                isCompleted = false,
+                title = title.value,
                 dueDate = selectedDate.value ?: 0,
                 dueDateString = dueDateString.value,
-                daysUntilDueDisplay = getDaysUntilDueDisplay(selectedDate.value),
-                icon = selectedIcon.value.icon,
+                iconIdentifier = selectedIcon.value.name,
                 daysUntilDue = getDaysUntilDue(selectedDate.value).toInt(),
-                isCompleted = false
+                daysUntilDueDisplay = getDaysUntilDueDisplay(selectedDate.value)
             )
             if (todoId == null && todoId != 0) {
                 todoRepository.insertTodoItem(todoItem.toTodoItemEntity())

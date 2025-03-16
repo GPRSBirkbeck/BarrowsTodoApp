@@ -12,6 +12,6 @@ data class TodoItem(
     val daysUntilDue: Int,
     val isCompleted: Boolean,
     val dueDateString: String,
-    val daysUntilDueDisplay: String,
-    val icon: ImageVector // TODO think about if I'm happy with this, or want icon here - will impact mapper.
+    val iconIdentifier: String,
+    val daysUntilDueDisplay: String
 )
