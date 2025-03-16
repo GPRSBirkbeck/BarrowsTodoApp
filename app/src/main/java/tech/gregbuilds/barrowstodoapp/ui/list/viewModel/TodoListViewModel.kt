@@ -24,9 +24,6 @@ class TodoListViewModel @Inject constructor(
         getTodoItems()
     }
 
-    //TODO nice to have - is a bonus
-    private fun swipeToDeleteItem() {}
-
     private fun getTodoItems() {
         viewModelScope.launch {
             try {
@@ -39,6 +36,13 @@ class TodoListViewModel @Inject constructor(
             } catch (e: Exception) {
                 _uiState.value = TodoListUiState.Failed("Failed to load items: ${e.message}")
             }
+        }
+    }
+
+    fun swipeToDeleteItem(id: Int) {
+        viewModelScope.launch {
+            todoRepository.deleteTodoItem(id)
+            getTodoItems()
         }
     }
 

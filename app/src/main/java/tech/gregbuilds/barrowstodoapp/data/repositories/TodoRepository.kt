@@ -12,7 +12,7 @@ interface TodoRepository {
 
     suspend fun insertTodoItem(todoItemEntity: TodoItemEntity)
 
-    suspend fun deleteTodoItem(todoItemEntity: TodoItemEntity)
+    suspend fun deleteTodoItem(id: Int)
 
 }
 

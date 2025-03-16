@@ -106,7 +106,7 @@ fun TodoDetailScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            val (lazyColumn, saveButton, cancelButton, loadingIndicator) = createRefs()
+            val (lazyColumn, saveButton, cancelButton, deleteButton, loadingIndicator) = createRefs()
 
             // Handle different UI states
             when (uiState) {
@@ -235,8 +235,7 @@ fun TodoDetailScreen(
                         modifier = Modifier
                             .constrainAs(saveButton) {
                                 bottom.linkTo(cancelButton.top, margin = 8.dp)
-                                start.linkTo(parent.start)
-                                end.linkTo(parent.end)
+                                start.linkTo(parent.start, margin = 16.dp)
                             }
                     ) {
                         Text("Save")
@@ -246,11 +245,25 @@ fun TodoDetailScreen(
                         modifier = Modifier
                             .constrainAs(cancelButton) {
                                 bottom.linkTo(parent.bottom, margin = 16.dp)
-                                start.linkTo(parent.start)
-                                end.linkTo(parent.end)
+                                start.linkTo(parent.start, margin = 16.dp)
                             }
                     ) {
                         Text("Cancel")
+                    }
+
+                    if (viewModel.isExistingTodo) {
+                        Button(
+                            onClick = {
+                                viewModel.deleteTodoItem()
+                            },
+                            modifier = Modifier
+                                .constrainAs(deleteButton) {
+                                    bottom.linkTo(parent.bottom, margin = 16.dp)
+                                    end.linkTo(parent.end, margin = 16.dp)
+                                }
+                        ) {
+                            Text("Delete")
+                        }
                     }
                 }
 

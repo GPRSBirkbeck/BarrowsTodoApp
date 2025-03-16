@@ -22,6 +22,6 @@ interface TodoDao {
     @Insert
     fun insertTodoItem(item: TodoItemEntity)
 
-    @Delete
-    fun deleteTodoItem(item: TodoItemEntity)
+    @Query("DELETE FROM todo_items WHERE id = :itemId")
+    suspend fun deleteTodoItemById(itemId: Int)
 }

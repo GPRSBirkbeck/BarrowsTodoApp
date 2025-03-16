@@ -32,7 +32,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import tech.gregbuilds.barrowstodoapp.R
-import tech.gregbuilds.barrowstodoapp.ui.details.TodoItemRow
+import tech.gregbuilds.barrowstodoapp.ui.composables.SwipeToDismissListItem
 import tech.gregbuilds.barrowstodoapp.ui.list.state.TodoListUiState
 import tech.gregbuilds.barrowstodoapp.ui.list.viewModel.TodoListViewModel
 
@@ -122,7 +122,8 @@ fun TodoListScreen(
                     ) {
                         listItems.forEach {
                             item {
-                                TodoItemRow(
+                                SwipeToDismissListItem(
+                                    onRemove = { id -> viewModel.swipeToDeleteItem(id) },
                                     item = it,
                                     modifier = Modifier.padding(16.dp),
                                     onClick = { onItemClicked(it.id) }

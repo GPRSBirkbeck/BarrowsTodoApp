@@ -1,5 +1,8 @@
 package tech.gregbuilds.barrowstodoapp.ui.details.viewModel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import java.util.concurrent.TimeUnit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -39,6 +42,8 @@ class TodoDetailViewModel @Inject constructor(private val todoRepository: TodoRe
     private val _body = MutableStateFlow("")
     val body: StateFlow<String> = _body.asStateFlow()
 
+     var isExistingTodo: Boolean by mutableStateOf(false)
+
     private val _selectedIcon = MutableStateFlow(TodoIconIdentifier.Alarm)
     val selectedIcon: StateFlow<TodoIconIdentifier> = _selectedIcon.asStateFlow()
 
@@ -54,12 +59,13 @@ class TodoDetailViewModel @Inject constructor(private val todoRepository: TodoRe
     private var todoId: Int? = null
 
     fun loadTodoItem(todoId: Int?) {
-        this.todoId = todoId
+        this.todoId = todoId //TODO refactor this
         viewModelScope.launch {
             _uiState.value = TodoDetailsUiState.Loading
             if (todoId == null) {
                 _uiState.value = TodoDetailsUiState.Success()
             } else {
+                isExistingTodo = true
                 val todoItem = todoRepository.getTodoItemById(todoId)
                 _title.value = todoItem.title
                 _body.value = todoItem.body
@@ -100,6 +106,15 @@ class TodoDetailViewModel @Inject constructor(private val todoRepository: TodoRe
             _title.value.isNotBlank()
                     && _body.value.isNotBlank()
                     && _selectedDate.value != null
+    }
+
+    fun deleteTodoItem() {
+        todoId?.let {
+            viewModelScope.launch {
+                todoRepository.deleteTodoItem(it)
+                _navigationEvents.emit(NavigationEvent.NavigateBack)
+            }
+        }
     }
 
     //TODO add use cases
