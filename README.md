@@ -40,7 +40,7 @@ The first todo, is to actually break the task down into steps.
 2. Displaying to-do items (home screen)
    1. Create composable for to-do item. Check!
    2. load to-do items from DB. Check! 
-   3. make icon red for a to-do item has passed its deadline (play around and see what I like the look of most)
+   3. make icon red for a to-do item has passed its deadline (play around and see what I like the look of most) Check!
    4. add a days until due subtitle. Check!
 3. Update to-do items
    1. Make the to-do items clickable.

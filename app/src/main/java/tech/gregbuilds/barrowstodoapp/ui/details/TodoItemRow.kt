@@ -7,6 +7,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -25,7 +26,10 @@ fun TodoItemRow(
         val (icon, title, body, dueDate, daysUntilDue) = createRefs()
         createVerticalChain(title, body, dueDate, chainStyle = androidx.constraintlayout.compose.ChainStyle.Packed)
 
+        val overdueColor = if (item.daysUntilDue < 0) Color.Red else Color.Unspecified
+
         Icon(
+            tint = overdueColor,
             imageVector = TodoIconIdentifier.fromIdentifier(item.iconIdentifier).icon,
             contentDescription = "Todo Item Icon",
             modifier = Modifier
@@ -65,6 +69,7 @@ fun TodoItemRow(
         )
 
         Text(
+            color = overdueColor,
             text = item.dueDateString,
             style = MaterialTheme.typography.bodySmall,
             modifier = Modifier
@@ -76,6 +81,7 @@ fun TodoItemRow(
         )
 
         Text(
+            color = overdueColor,
             text = item.daysUntilDueDisplay,
             style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier
