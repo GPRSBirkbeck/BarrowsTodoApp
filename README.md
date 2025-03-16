@@ -47,8 +47,8 @@ The first todo, is to actually break the task down into steps.
    2. Upon clicking, reuse the creation screen, and allow the user to update the fields
    3. Add a save button to the bottom, which only becomes enabled once the user has made a change
 4. Delete to-do items
-   1. Add a delete button to the reused creation screen
-   2. Add swipe to delete functionality - check out the repo I made with swipe to delete functionality - this is really easy.
+   1. Add a delete button to the reused creation screen - check!
+   2. Add swipe to delete functionality - check out the repo I made with swipe to delete functionality - check!
 5. Push notifications:
    1. Decide if I want to implement this. If yes, make it easy to test in the dataset I'm giving to the tester.
    2. setup service for this - I'll add more details here if I decide to proceed.
