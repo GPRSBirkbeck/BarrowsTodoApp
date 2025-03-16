@@ -10,13 +10,12 @@ import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 
 //This extension function could equally live in the model directory.
-fun TodoItemEntity.toTodoItemUi(dateFormatterService: DateFormatterService): TodoItem {
+fun TodoItemEntity.toTodoItemUi(): TodoItem {
     val dueDate = Instant.ofEpochMilli(dueDateLong)
         .atZone(ZoneId.systemDefault())
         .toLocalDate()
 
     val daysUntilDue = LocalDate.now().until(dueDate, ChronoUnit.DAYS).toInt()
-    val formattedDate = dateFormatterService.formatDate(dueDate.toEpochDay(), DATE_PATTERN)
 
     return TodoItem(
         id = id,
@@ -25,7 +24,7 @@ fun TodoItemEntity.toTodoItemUi(dateFormatterService: DateFormatterService): Tod
         dueDate = dueDateLong,
         isCompleted = completed,
         daysUntilDue = daysUntilDue,
-        dueDateString = formattedDate,
+        dueDateString = dueDateString,
         daysUntilDueDisplay = daysUntilDue.daysUntilDueDisplay(),
         icon = TodoIconIdentifier.fromIdentifier(iconIdentifier).icon
     )
@@ -38,4 +37,16 @@ fun Int.daysUntilDueDisplay(): String {
         this == 1 -> "Due Tomorrow"
         else -> "$this days"
     }
+}
+
+// Extension function to convert TodoItem to TodoItemEntity
+fun TodoItem.toTodoItemEntity(): TodoItemEntity {
+    return TodoItemEntity(
+        title = this.title,
+        body = this.body,
+        completed = this.isCompleted,
+        dueDateLong = this.dueDate,
+        dueDateString = this.dueDateString,
+        iconIdentifier = this.icon.name
+    )
 }

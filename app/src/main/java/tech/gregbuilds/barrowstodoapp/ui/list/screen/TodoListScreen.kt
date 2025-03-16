@@ -1,20 +1,42 @@
 package tech.gregbuilds.barrowstodoapp.ui.list.screen
 
+import android.util.Log
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import tech.gregbuilds.barrowstodoapp.R
+import tech.gregbuilds.barrowstodoapp.ui.details.TodoItemRow
 import tech.gregbuilds.barrowstodoapp.ui.list.state.TodoListUiState
 import tech.gregbuilds.barrowstodoapp.ui.list.viewModel.TodoListViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TodoListScreen(
     onAddClicked: () -> Unit,
@@ -22,18 +44,63 @@ fun TodoListScreen(
     viewModel: TodoListViewModel,
     modifier: Modifier = Modifier
 ) {
-    Scaffold { innerPadding ->
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(id = R.string.app_name),
+                        color = Color.White,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary
+                )
+            )
+        }
+    ) { innerPadding ->
+        val (lazyColumn, button, loadingIndicator) = FocusRequester.createRefs()
+
         val uiState by viewModel.uiState.collectAsState()
+
+
+        val lifecycleOwner = LocalLifecycleOwner.current
+        LaunchedEffect(key1 = lifecycleOwner) {
+            val observer = LifecycleEventObserver { _, event ->
+                if (event == Lifecycle.Event.ON_RESUME) {
+                    Log.d("TodoListScreen", "ON_RESUME event triggered")
+                    viewModel.onScreenResumed()
+                }
+            }
+            lifecycleOwner.lifecycle.addObserver(observer)
+
+        }
+
         // TODO: migrate to constraintLayouts
-        LazyColumn(
+        ConstraintLayout(
             modifier = modifier
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
+            val (lazyColumn, button, loadingIndicator) = createRefs()
+
             when (uiState) {
                 is TodoListUiState.Loading -> {
                     // Show a loading indicator
-                    item {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .constrainAs(loadingIndicator) {
+                                top.linkTo(parent.top)
+                                bottom.linkTo(parent.bottom)
+                                start.linkTo(parent.start)
+                                end.linkTo(parent.end)
+                            },
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
                         CircularProgressIndicator()
                     }
                 }
@@ -41,22 +108,26 @@ fun TodoListScreen(
                 is TodoListUiState.Success -> {
                     // Show the list of items
                     val listItems = (uiState as TodoListUiState.Success).listItems
-                    listItems.forEach {
-                        item {
-                            Text(
-                                text = "Title: ${it.title}",
-                                modifier = Modifier.padding(16.dp)
-                            )
-                            Button(
-                                onClick = { onItemClicked(it.id) },
-                                modifier = Modifier.padding(16.dp)
-                            ) {
-                                Text("View")
+                    LazyColumn(
+                        modifier = Modifier
+                            .constrainAs(lazyColumn) {
+                                top.linkTo(parent.top)
+                                bottom.linkTo(button.top)
+                                start.linkTo(parent.start)
+                                end.linkTo(parent.end)
+                                height =
+                                    Dimension.fillToConstraints
                             }
-                            //TODO have a nice composable for Todo Items
-                            //TodoItemRow(item)
+                            .fillMaxSize()
+                    ) {
+                        listItems.forEach {
+                            item {
+                                TodoItemRow(
+                                    item = it,
+                                    modifier = Modifier.padding(16.dp)
+                                )
+                            }
                         }
-
                         //TODO think about adding pagination with the Paging library.
                     }
                 }
@@ -64,31 +135,29 @@ fun TodoListScreen(
                 is TodoListUiState.Failed -> {
                     // Show an error message
                     val errorMessage = (uiState as TodoListUiState.Failed).errorMessage
-                    item {
-                        Text(
-                            text = "Error: $errorMessage",
-                            modifier = Modifier.padding(16.dp)
-                        )
-                    }
+                    Text(
+                        text = "Error: $errorMessage",
+                        modifier = Modifier.padding(16.dp)
+                    )
                 }
 
                 is TodoListUiState.Empty -> {
                     // Show an empty message
-                    item {
-                        Text(
-                            text = "No items found",
-                            modifier = Modifier.padding(16.dp)
-                        )
-                    }
+                    Text(
+                        text = "No items found",
+                        modifier = Modifier.padding(16.dp)
+                    )
                 }
             }
-            item {
-                Button(
-                    onClick = { onAddClicked() },
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Text("Create a To-do item")
-                }
+            Button(
+                onClick = { onAddClicked() },
+                modifier = Modifier
+                    .constrainAs(button) {
+                        bottom.linkTo(parent.bottom, margin = 16.dp)
+                        end.linkTo(parent.end, margin = 16.dp)
+                    }
+            ) {
+                Text("Create a To-do item")
             }
         }
     }

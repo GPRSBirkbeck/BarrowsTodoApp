@@ -41,4 +41,12 @@ class TodoListViewModel @Inject constructor(
             }
         }
     }
+
+    fun onScreenResumed() {
+        refreshData()
+    }
+
+    private fun refreshData() {
+        getTodoItems()
+    }
 }

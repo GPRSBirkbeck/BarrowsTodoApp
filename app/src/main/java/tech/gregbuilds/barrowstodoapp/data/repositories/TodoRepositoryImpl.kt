@@ -5,7 +5,6 @@ import kotlinx.coroutines.withContext
 import tech.gregbuilds.barrowstodoapp.data.dao.TodoDao
 import tech.gregbuilds.barrowstodoapp.data.model.TodoItemEntity
 import tech.gregbuilds.barrowstodoapp.model.TodoItem
-import tech.gregbuilds.barrowstodoapp.util.DateFormatterService
 import tech.gregbuilds.barrowstodoapp.util.toTodoItemUi
 import javax.inject.Inject
 
@@ -16,14 +15,13 @@ import javax.inject.Inject
 */
 
 class TodoRepositoryImpl @Inject constructor(
-    private val todoDao: TodoDao,
-    private val dateFormatterService: DateFormatterService
+    private val todoDao: TodoDao
 ) : TodoRepository {
 
      override suspend fun getTodoItems(): List<TodoItem> {
         return withContext(Dispatchers.IO) {
             todoDao.getTodoItems().map { entity ->
-                entity.toTodoItemUi(dateFormatterService)
+                entity.toTodoItemUi()
             }
         }
     }
@@ -31,7 +29,7 @@ class TodoRepositoryImpl @Inject constructor(
     // As is best practice - the repository is responsible for mapping the entity to the UI model.
      override suspend fun getTodoItemById(id: Int): TodoItem {
         return withContext(Dispatchers.IO) {
-            todoDao.getTodoItemById(id).toTodoItemUi(dateFormatterService)
+            todoDao.getTodoItemById(id).toTodoItemUi()
         }
     }
 

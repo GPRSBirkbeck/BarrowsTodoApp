@@ -6,10 +6,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import tech.gregbuilds.barrowstodoapp.ui.list.screen.TodoListScreen
-import tech.gregbuilds.barrowstodoapp.ui.list.viewModel.TodoListViewModel
 import tech.gregbuilds.barrowstodoapp.ui.details.screen.TodoDetailScreen
 import tech.gregbuilds.barrowstodoapp.ui.details.viewModel.TodoDetailViewModel
+import tech.gregbuilds.barrowstodoapp.ui.list.screen.TodoListScreen
+import tech.gregbuilds.barrowstodoapp.ui.list.viewModel.TodoListViewModel
 
 //For deeplinks, this is a good refresher: https://developer.android.com/develop/ui/compose/navigation#deeplinks
 @Composable
@@ -35,14 +35,15 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
             )
         }
         composable(NavigationItem.TodoDetailScreen.ROUTEWITHID) { backStackEntry ->
+            //TODO look at navController.popBackStack() instead of having a bespoke action for this.
             val viewModel = hiltViewModel<TodoDetailViewModel>()
             val id = backStackEntry.arguments?.getString("id")?.toInt()
-            TodoDetailScreen(id = id, viewModel = viewModel)
+            TodoDetailScreen(todoId = id, viewModel = viewModel, goBack = { navController.popBackStack() })
         }
         composable(NavigationItem.TodoDetailScreen.ROUTEWITHOUTID) {
             //TODO tidy up double instance getting of this viewModel.
             val viewModel = hiltViewModel<TodoDetailViewModel>()
-            TodoDetailScreen(id = null, viewModel = viewModel)
+            TodoDetailScreen(todoId = null, viewModel = viewModel, goBack = { navController.popBackStack() })
         }
     }
 }
