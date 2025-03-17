@@ -80,7 +80,7 @@ The first todo, is to actually break the task down into steps.
    6. Add a datastore of test/dummy data for the assessor to use - I think for this, maybe just have a button they can click to populate the list. Hide the button if the list is not empty. Done!
    7. Reread the instructions one more time, did I do what they asked for? yes.
    8. Block them from entering items with a past due date. Check!
-   9. Test for 10 mins and fix.
+   9. Test for 10 mins and fix. Done.
    10. Set up push notifications for items expiring today.
    11. Check threading one more time. Done.
    12. Make it clear in commit history now that basics are complete.
