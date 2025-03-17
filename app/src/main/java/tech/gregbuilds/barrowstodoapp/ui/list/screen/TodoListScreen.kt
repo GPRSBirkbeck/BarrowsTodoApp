@@ -214,7 +214,7 @@ fun TodoListScreen(
                                 OutlinedTextField(
                                     value = searchText,
                                     onValueChange = { viewModel.updateSearchText(it) },
-                                    placeholder = { Text("Search your todos") },
+                                    placeholder = { Text("Search your to-dos") },
                                     modifier = Modifier
                                         .padding(8.dp)
                                         .constrainAs(searchTextField) {
@@ -434,7 +434,7 @@ fun TodoListScreen(
                             end.linkTo(parent.end, margin = 16.dp)
                         }
                 ) {
-                    Text("Create a To-do item")
+                    Text("Create a to-do item")
                 }
             }
         }

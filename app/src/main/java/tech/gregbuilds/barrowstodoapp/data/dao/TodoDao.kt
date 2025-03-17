@@ -26,6 +26,7 @@ interface TodoDao {
     @Query("DELETE FROM todo_items WHERE id = :itemId")
     suspend fun deleteTodoItemById(itemId: Int)
 
+    // The requirement was just titles, but I think our users would be happy if they can do title or body
     @Query("SELECT * FROM todo_items WHERE title LIKE '%' || :searchString || '%' OR body LIKE '%' || :searchString || '%'")
     fun searchTodoItems(searchString: String): List<TodoItemEntity>
 }

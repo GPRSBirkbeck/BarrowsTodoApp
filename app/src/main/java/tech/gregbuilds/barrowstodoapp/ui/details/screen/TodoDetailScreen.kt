@@ -217,7 +217,7 @@ fun TodoDetailScreen(
                                         )
                                         OutlinedTextField(
                                             value = body.value,
-                                            label = { Text("Body") },
+                                            label = { Text("Details") },
                                             onValueChange = { viewModel.updateBody(it) },
                                             modifier = Modifier.fillMaxWidth()
                                         )

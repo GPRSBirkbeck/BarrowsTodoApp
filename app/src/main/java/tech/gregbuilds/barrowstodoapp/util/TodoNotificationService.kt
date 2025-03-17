@@ -34,9 +34,8 @@ class TodoNotificationServiceImpl @Inject constructor(
 
         val notification = NotificationCompat.Builder(context, TODO_CHANNEL_ID)
             .setSmallIcon(R.drawable.baseline_checklist_24)
-            .setContentTitle("Todo due today: ${todoItem.title}")
+            .setContentTitle("To-do due today: ${todoItem.title}")
             .setContentText("Description: ${todoItem.body}")
-            .setStyle(BigTextStyle().bigText("Due today: ${todoItem.title}"))
             .setContentIntent(activityPendingIntent)
             .build()
 
