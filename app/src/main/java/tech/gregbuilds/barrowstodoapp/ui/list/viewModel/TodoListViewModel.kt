@@ -28,6 +28,8 @@ class TodoListViewModel @Inject constructor(
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
+    private var hasSentNotification = false
+
     init {
         getTodoItems()
     }
@@ -51,6 +53,7 @@ class TodoListViewModel @Inject constructor(
                     if (itemsDueToday.isNotEmpty()) {
                         val firstItemDueToday = itemsDueToday.first()
                         todoNotificationServiceImpl.showNotification(firstItemDueToday)
+                        hasSentNotification = true // A much better solution would be implemented in the long run.
                     }
                     _uiState.value = TodoListUiState.Success(items)
                 }
