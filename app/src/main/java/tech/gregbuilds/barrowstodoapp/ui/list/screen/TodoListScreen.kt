@@ -231,7 +231,7 @@ fun TodoListScreen(
                                     else -> Icons.Default.FilterList
                                 }
                                 Icon(
-                                    tint = MaterialTheme.colorScheme.tertiary,
+                                    tint = MaterialTheme.colorScheme.secondary,
                                     imageVector = icon,
                                     contentDescription = "menu",
                                     modifier = Modifier
@@ -437,7 +437,7 @@ fun TodoListScreen(
                             end.linkTo(parent.end, margin = 16.dp)
                         }
                 ) {
-                    Text("Create a to-do")
+                    Text("Add a to-do")
                 }
             }
         }
