@@ -1,5 +1,5 @@
 # Barrows To-do App
-This app is my work to create a simple TODO app for Barrows.
+This app is my work to create a simple to-do app for Barrows.
 
 ## Task Description
 Build an android app that allows a user to create a simple to-do list in Kotlin.
