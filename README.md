@@ -7,6 +7,14 @@ Store all of the data locally.
 
 ## Instructions on how to use this project.
 TODO: Populate this when "Basics" are complete, and again when "Extended functionality" is complete.
+This app is a to-do app, built for Barrows.
+To use this app, install android studio and then wait for your build to complete.
+Next, attach a device or create an emulator, and click the green "Run" button.
+Once the app is up and running, click "Create a To-do item" in the bottom right.
+This will bring the To-do creation screen into the foreground.
+Here you will need to add a title, body, select an icon, and select a due date before you can create a To-do item.
+Upon creating the To-do item, you will be brought back to the list screen. Here you can see all of your To-do items.
+Each item is clickable so you can update the item if needed.
 
 ## Some architectural notes
 This is a single-activity architected app, using a navigation component to navigate between screens.
@@ -57,7 +65,7 @@ The first todo, is to actually break the task down into steps.
    1. update app icon. Check!
    2. review code:
       1. when I worked through the steps above, did I opt for speed over best practice? Looks good - just missing use cases.
-      2. How do I feel about the current state of my dependency injection? Happy
+      2. How do I feel about the current state of my dependency injection? Happy.
       3. Have a think about my "state" setup - I think this can be improved upon. It's good enough.
       4. Review my packages - could these be simplified? Happy for now.
       5. Review threading - happy.
@@ -65,31 +73,31 @@ The first todo, is to actually break the task down into steps.
       7. Check out the AppNavHost one more time. Check!
       8. Check out my use of todo vs. To-do vs Todo naming conventions - I imagine there will be a case or two where these aren't aligned. Check!
       9. Think about renaming it all to task - not Todo - as this might be simpler - have a think. No - the brief says Todo so I'm matching that.
-   3. Think about the domain layer one more time
-   4. review gradle - do I have any unneeded dependencies?
-   5. Add instructions on how to use this app into this README (also check for punctuation - I don't care if I end lines with dots, just make it consistent). 
+   3. Think about the domain layer one more time - I could add useCases, but this feels like overkill.
+   4. review gradle - do I have any unneeded dependencies? Not sure this matters for this task.
+   5. Add instructions on how to use this app into this README (also check for punctuation - I don't care if I end lines with dots, just make it consistent). Done"
    6. Add a datastore of test/dummy data for the assessor to use - I think for this, maybe just have a button they can click to populate the list. Hide the button if the list is not empty.
    7. Reread the instructions one more time, did I do what they asked for?
-   8. Check threading one more time
+   8. Check threading one more time. Done.
    9. Make it clear in commit history now that basics are complete.
 
 "Extended" steps:
 1. Search through all the titles of their to-dos
-   1. Add Search bar
-   2. Implement search: VM -> Repo -> DB
+   1. Add Search bar.
+   2. Implement search: VM -> Repo -> DB.
    3. Test edge cases and double check threading.
 2. Sort users to-dos in ascending or descending order of the number of occurrences of a specific word.
-   1. Add Icon to left of search bar that toggles between ascending or descending
-   2. Add nice list animation when they change between ascending and descending
+   1. Add Icon to left of search bar that toggles between ascending or descending.
+   2. Add nice list animation when they change between ascending and descending.
    3. Figure out which user journey exactly triggers this - it's not clear at this time.
 3. Share entries via QR code: 
-   1. Create QR code creation service
+   1. Create QR code creation service.
    2. Add icon/button to trigger sharing.
    3. set up so that camera that scans this knows to use BarrowsTodoList app - decide if I want to trigger scanning from within the app - if not, give the user a prompt on camera opening etc. If I do in app, ofc remember to ask for permissions - just putting this here in case I forget - I won't.
    4. when scanned - refresh and add to the list - I think I want to add a subtitle that tells the user it was scanned from a friends todo list.
 4. Scan Integrity check (like a hash or checkSum) so that the two users can be sure that the data was transferred without errors.
    1. think about implementation later, I'm happy with the steps so far.
-5. Make "Extended Functionality" production ready
+5. Make "Extended Functionality" production ready.
    1. Details TBC - similar to the steps in 'Make "Basics" production ready'
 
 "Submission" steps:
