@@ -38,7 +38,6 @@ fun SwipeToDismissListItem(
     )
     SwipeToDismissBox(
         state = dismissState,
-        modifier = Modifier,
         backgroundContent = { DismissBackground(dismissState) },
         content = {
             TodoItemRow(

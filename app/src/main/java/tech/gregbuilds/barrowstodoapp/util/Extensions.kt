@@ -1,8 +1,6 @@
 package tech.gregbuilds.barrowstodoapp.util
 
-import tech.gregbuilds.barrowstodoapp.common.Constants.DATE_PATTERN
 import tech.gregbuilds.barrowstodoapp.data.model.TodoItemEntity
-import tech.gregbuilds.barrowstodoapp.model.TodoIconIdentifier
 import tech.gregbuilds.barrowstodoapp.model.TodoItem
 import java.time.Instant
 import java.time.LocalDate
