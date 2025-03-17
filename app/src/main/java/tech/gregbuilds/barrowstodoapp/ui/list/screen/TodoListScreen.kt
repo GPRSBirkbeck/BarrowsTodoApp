@@ -51,6 +51,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -226,9 +227,8 @@ fun TodoListScreen(
                                         }
                                 )
                                 val icon = when (viewModel.sortType.collectAsState().value) {
-                                    SortType.ASCENDING -> Icons.Default.ArrowUpward
-                                    SortType.DESCENDING -> Icons.Default.FilterList
-                                    else -> Icons.Default.Menu
+                                    SortType.NONE -> Icons.Default.Menu
+                                    else -> Icons.Default.FilterList
                                 }
                                 Icon(
                                     tint = MaterialTheme.colorScheme.tertiary,
@@ -244,6 +244,7 @@ fun TodoListScreen(
                                         .clickable {
                                             viewModel.cycleSortType()
                                         }
+                                        .rotate(if (viewModel.sortType.collectAsState().value == SortType.ASCENDING) 180f else 0f)
                                 )
                                 Text(
                                     text = when (viewModel.sortType.collectAsState().value) {
@@ -267,6 +268,7 @@ fun TodoListScreen(
                             }
                         }
                     }
+
                     else -> {}
                 }
 
@@ -361,6 +363,7 @@ fun TodoListScreen(
                             )
                         }
                     }
+
                     TodoListUiState.None -> {
                         Card(
                             modifier = Modifier

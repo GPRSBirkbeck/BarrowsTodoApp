@@ -34,13 +34,13 @@ class TodoListViewModel @Inject constructor(
         getTodoItems()
     }
 
-    private fun getTodoItems(ascending: Boolean? = null) {
+    private fun getTodoItems() {
         viewModelScope.launch {
             try {
                 val items = if (searchQuery.value.isNotEmpty() && sortType.value == SortType.NONE) {
                     todoRepository.searchTodoItems(searchQuery.value)
-                } else if (ascending != null) {
-                    todoRepository.getTodoItemsOrderedByWordFrequency(searchQuery.value, ascending)
+                } else if (sortType.value == SortType.ASCENDING || sortType.value == SortType.DESCENDING) {
+                    todoRepository.getTodoItemsOrderedByWordFrequency(searchQuery.value, sortType.value == SortType.ASCENDING)
                 } else {
                     todoRepository.getTodoItems()
                 }
@@ -73,14 +73,14 @@ class TodoListViewModel @Inject constructor(
             if (sortType.value != SortType.NONE) {
                 getTodoItems()
             } else {
-                getTodoItems(ascending = sortType.value == SortType.ASCENDING)
+                getTodoItems()
             }
         }
     }
 
     fun updateSearchText(searchText: String) {
         _searchQuery.value = searchText
-        getTodoItems(ascending =  null)
+        getTodoItems()
     }
 
     fun swipeToDeleteItem(id: Int) {
