@@ -33,7 +33,7 @@ fun Int.daysUntilDueDisplay(): String {
         this < 0 -> "Overdue"
         this == 0 -> "Due Today"
         this == 1 -> "Due Tomorrow"
-        else -> "$this days"
+        else -> "Due in $this days"
     }
 }
 

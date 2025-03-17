@@ -437,7 +437,7 @@ fun TodoListScreen(
                             end.linkTo(parent.end, margin = 16.dp)
                         }
                 ) {
-                    Text("Create a to-do item")
+                    Text("Create a to-do")
                 }
             }
         }

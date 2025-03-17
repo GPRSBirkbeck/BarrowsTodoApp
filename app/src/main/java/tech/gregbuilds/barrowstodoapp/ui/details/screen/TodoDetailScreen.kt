@@ -59,6 +59,8 @@ import tech.gregbuilds.barrowstodoapp.model.TodoIconIdentifier
 import tech.gregbuilds.barrowstodoapp.ui.details.state.NavigationEvent
 import tech.gregbuilds.barrowstodoapp.ui.details.state.TodoDetailsUiState
 import tech.gregbuilds.barrowstodoapp.ui.details.viewModel.TodoDetailViewModel
+import java.time.LocalDate
+import java.time.ZoneId
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -92,7 +94,7 @@ fun TodoDetailScreen(
                         textAlign = TextAlign.Start,
                         modifier = Modifier.fillMaxWidth(),
                         color = if (isSystemInDarkTheme()) Color.Black else Color.White,
-                        text = if (viewModel.isExistingTodo) "Update your to-do" else "Create a new to-do"
+                        text = if (viewModel.isExistingTodo) "Update to-do details" else "Create a new to-do"
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -167,7 +169,8 @@ fun TodoDetailScreen(
                                 selectableDates = object :
                                     SelectableDates {
                                     override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-                                        return utcTimeMillis >= System.currentTimeMillis()
+                                        val todayStartMillis = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+                                        return utcTimeMillis >= todayStartMillis
                                     }
                                 }
                             )
