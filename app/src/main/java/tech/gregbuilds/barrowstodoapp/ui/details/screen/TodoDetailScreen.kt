@@ -61,17 +61,14 @@ import tech.gregbuilds.barrowstodoapp.ui.details.viewModel.TodoDetailViewModel
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun TodoDetailScreen(
-    viewModel: TodoDetailViewModel,
     todoId: Int?,
-    goBack: () -> Unit,
-    modifier: Modifier = Modifier
+    viewModel: TodoDetailViewModel,
+    goBack: () -> Unit
 ) {
     // Load the TodoItem when the screen is launched
     LaunchedEffect(key1 = todoId) {
         viewModel.loadTodoItem(todoId)
     }
-
-    // Collect the UI state from the ViewModel
     val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(key1 = Unit) {

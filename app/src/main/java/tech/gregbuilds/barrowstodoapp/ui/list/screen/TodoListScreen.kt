@@ -43,11 +43,13 @@ import tech.gregbuilds.barrowstodoapp.ui.list.viewModel.TodoListViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TodoListScreen(
-    onAddClicked: () -> Unit,
-    onItemClicked: (Int) -> Unit,
     viewModel: TodoListViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onAddClicked: () -> Unit,
+    onItemClicked: (Int) -> Unit
 ) {
+    val uiState by viewModel.uiState.collectAsState()
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -65,8 +67,6 @@ fun TodoListScreen(
             )
         }
     ) { innerPadding ->
-        val uiState by viewModel.uiState.collectAsState()
-
         val lifecycleOwner = LocalLifecycleOwner.current
         LaunchedEffect(key1 = lifecycleOwner) {
             val observer = LifecycleEventObserver { _, event ->
@@ -88,13 +88,12 @@ fun TodoListScreen(
                 contentScale = ContentScale.Crop
             )
 
-            // TODO: migrate to constraintLayouts
             ConstraintLayout(
                 modifier = modifier
                     .fillMaxSize()
                     .padding(innerPadding)
             ) {
-                val (lazyColumn, button, loadingIndicator) = createRefs()
+                val (itemList, addButton, showLoading) = createRefs()
 
                 when (uiState) {
                     is TodoListUiState.Loading -> {
@@ -102,7 +101,7 @@ fun TodoListScreen(
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .constrainAs(loadingIndicator) {
+                                .constrainAs(showLoading) {
                                     top.linkTo(parent.top)
                                     bottom.linkTo(parent.bottom)
                                     start.linkTo(parent.start)
@@ -121,9 +120,9 @@ fun TodoListScreen(
                         LazyColumn(
                             modifier = Modifier
                                 .padding(vertical = 12.dp)
-                                .constrainAs(lazyColumn) {
+                                .constrainAs(itemList) {
                                     top.linkTo(parent.top)
-                                    bottom.linkTo(button.top)
+                                    bottom.linkTo(addButton.top)
                                     start.linkTo(parent.start)
                                     end.linkTo(parent.end)
                                     height =
@@ -141,7 +140,7 @@ fun TodoListScreen(
                                     )
                                 }
                             }
-                            //TODO think about adding pagination with the Paging library.
+                            // In a production app I would handle pagination here.
                         }
                     }
 
@@ -176,7 +175,7 @@ fun TodoListScreen(
                     ),
                     shape = RoundedCornerShape(8.dp),
                     modifier = Modifier
-                        .constrainAs(button) {
+                        .constrainAs(addButton) {
                             bottom.linkTo(parent.bottom, margin = 16.dp)
                             end.linkTo(parent.end, margin = 16.dp)
                         }

@@ -11,7 +11,6 @@ import tech.gregbuilds.barrowstodoapp.data.repositories.TodoRepositoryImpl
 import tech.gregbuilds.barrowstodoapp.ui.list.state.TodoListUiState
 import javax.inject.Inject
 
-//TODO think about whether I need a baseViewModel or not.
 @HiltViewModel
 class TodoListViewModel @Inject constructor(
     private val todoRepository: TodoRepositoryImpl
@@ -50,6 +49,7 @@ class TodoListViewModel @Inject constructor(
         refreshData()
     }
 
+    // kept as a separate function to allow expansion in the future - it does look like duplication for now - sorry.
     private fun refreshData() {
         getTodoItems()
     }

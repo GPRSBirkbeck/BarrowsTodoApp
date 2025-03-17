@@ -3,7 +3,6 @@ package tech.gregbuilds.barrowstodoapp.ui.details.viewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import java.util.concurrent.TimeUnit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,30 +18,30 @@ import tech.gregbuilds.barrowstodoapp.model.TodoIconIdentifier
 import tech.gregbuilds.barrowstodoapp.model.TodoItem
 import tech.gregbuilds.barrowstodoapp.ui.details.state.NavigationEvent
 import tech.gregbuilds.barrowstodoapp.ui.details.state.TodoDetailsUiState
+import tech.gregbuilds.barrowstodoapp.util.DateFormatterService
 import tech.gregbuilds.barrowstodoapp.util.toTodoItemEntity
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
-class TodoDetailViewModel @Inject constructor(private val todoRepository: TodoRepository) :
-    ViewModel() {
+class TodoDetailViewModel @Inject constructor(
+    private val todoRepository: TodoRepository,
+    private val dateFormatterService: DateFormatterService
+) : ViewModel() {
+
+    //Our state object for the UI
     private val _uiState = MutableStateFlow<TodoDetailsUiState>(TodoDetailsUiState.Loading)
     val uiState: StateFlow<TodoDetailsUiState> = _uiState.asStateFlow()
 
-    // New SharedFlow for navigation events
+    // Navigation event states - for now only used to trigger a back navigation
     private val _navigationEvents = MutableSharedFlow<NavigationEvent>()
     val navigationEvents: SharedFlow<NavigationEvent> = _navigationEvents.asSharedFlow()
 
-    // State variables
+    // State objects for the form fields - debatably these could be combined into the uiState object - but this feels cleaner when it comes to updates.
     private val _title = MutableStateFlow("")
     val title: StateFlow<String> = _title.asStateFlow()
 
     private val _body = MutableStateFlow("")
     val body: StateFlow<String> = _body.asStateFlow()
-
-     var isExistingTodo: Boolean by mutableStateOf(false)
 
     private val _selectedIcon = MutableStateFlow(TodoIconIdentifier.Alarm)
     val selectedIcon: StateFlow<TodoIconIdentifier> = _selectedIcon.asStateFlow()
@@ -54,12 +53,14 @@ class TodoDetailViewModel @Inject constructor(private val todoRepository: TodoRe
     val isSaveEnabled: StateFlow<Boolean> = _isSaveEnabled.asStateFlow()
 
     private val _dueDateString = MutableStateFlow("")
-    val dueDateString: StateFlow<String> = _dueDateString.asStateFlow()
+    private val dueDateString: StateFlow<String> = _dueDateString.asStateFlow()
 
-    private var todoId: Int? = null
+
+    var isExistingTodo: Boolean by mutableStateOf(false)
+    private var selectedTodoId: Int? = null
 
     fun loadTodoItem(todoId: Int?) {
-        this.todoId = todoId //TODO refactor this
+        selectedTodoId = todoId
         viewModelScope.launch {
             _uiState.value = TodoDetailsUiState.Loading
             if (todoId == null) {
@@ -97,19 +98,18 @@ class TodoDetailViewModel @Inject constructor(private val todoRepository: TodoRe
 
     fun updateSelectedDate(newDate: Long?) {
         _selectedDate.value = newDate
-        _dueDateString.value = getFormattedDate(newDate)
+        _dueDateString.value = dateFormatterService.getFormattedDate(newDate)
         updateSaveEnabled()
     }
 
     private fun updateSaveEnabled() {
-        _isSaveEnabled.value =
-            _title.value.isNotBlank()
-                    && _body.value.isNotBlank()
-                    && _selectedDate.value != null
+        _isSaveEnabled.value = title.value.isNotBlank()
+                    && body.value.isNotBlank()
+                    && selectedDate.value != null
     }
 
     fun deleteTodoItem() {
-        todoId?.let {
+        selectedTodoId?.let {
             viewModelScope.launch {
                 todoRepository.deleteTodoItem(it)
                 _navigationEvents.emit(NavigationEvent.NavigateBack)
@@ -121,17 +121,17 @@ class TodoDetailViewModel @Inject constructor(private val todoRepository: TodoRe
     fun saveTodoItem() {
         viewModelScope.launch {
             val todoItem = TodoItem(
-                id = todoId ?: 0,
+                id = selectedTodoId ?: 0,
                 body = body.value,
                 isCompleted = false,
                 title = title.value,
                 dueDate = selectedDate.value ?: 0,
                 dueDateString = dueDateString.value,
                 iconIdentifier = selectedIcon.value.name,
-                daysUntilDue = getDaysUntilDue(selectedDate.value).toInt(),
-                daysUntilDueDisplay = getDaysUntilDueDisplay(selectedDate.value)
+                daysUntilDue = dateFormatterService.getDaysUntilDue(selectedDate.value).toInt(),
+                daysUntilDueDisplay = dateFormatterService.getDaysUntilDueDisplay(selectedDate.value)
             )
-            if (todoId == null && todoId != 0) {
+            if (selectedTodoId == null) {
                 todoRepository.insertTodoItem(todoItem.toTodoItemEntity())
             } else {
                 todoRepository.updateTodoItem(todoItem.toTodoItemEntity())
@@ -139,33 +139,5 @@ class TodoDetailViewModel @Inject constructor(private val todoRepository: TodoRe
             // Emit a navigation event after successful save
             _navigationEvents.emit(NavigationEvent.NavigateBack)
         }
-    }
-
-    private fun getFormattedDate(date: Long?): String {
-        if (date == null) return ""
-        val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault()) //extract this ofc to a dependency.
-        return dateFormat.format(Date(date))
-    }
-
-    private fun getDaysUntilDueDisplay(date: Long?): String {
-        if (date == null) return ""
-        val today = Date()
-        val dueDate = Date(date)
-        val diff = dueDate.time - today.time
-        val days = diff / (1000 * 60 * 60 * 24)
-        return when {
-            days < 0 -> "Overdue"
-            days == 0L -> "Due Today"
-            days == 1L -> "Due Tomorrow"
-            else -> "Due in $days days"
-        }
-    }
-
-    private fun getDaysUntilDue(date: Long?): Long {
-        if (date == null) return Long.MAX_VALUE // Or another appropriate value for null dates
-        val today = Date()
-        val dueDate = Date(date)
-        val diffInMillis = dueDate.time - today.time
-        return TimeUnit.DAYS.convert(diffInMillis, TimeUnit.MILLISECONDS)
     }
 }
