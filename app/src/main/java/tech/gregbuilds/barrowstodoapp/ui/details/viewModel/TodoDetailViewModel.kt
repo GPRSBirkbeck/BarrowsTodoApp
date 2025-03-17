@@ -20,6 +20,7 @@ import tech.gregbuilds.barrowstodoapp.ui.details.state.NavigationEvent
 import tech.gregbuilds.barrowstodoapp.ui.details.state.TodoDetailsUiState
 import tech.gregbuilds.barrowstodoapp.util.DateFormatterService
 import tech.gregbuilds.barrowstodoapp.util.toTodoItemEntity
+import tech.gregbuilds.barrowstodoapp.util.toTodoItemEntityWithId
 import javax.inject.Inject
 
 @HiltViewModel
@@ -134,7 +135,7 @@ class TodoDetailViewModel @Inject constructor(
             if (selectedTodoId == null) {
                 todoRepository.insertTodoItem(todoItem.toTodoItemEntity())
             } else {
-                todoRepository.updateTodoItem(todoItem.toTodoItemEntity())
+                todoRepository.updateTodoItem(todoItem.toTodoItemEntityWithId())
             }
             // Emit a navigation event after successful save
             _navigationEvents.emit(NavigationEvent.NavigateBack)

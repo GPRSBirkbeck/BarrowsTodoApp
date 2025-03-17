@@ -48,3 +48,15 @@ fun TodoItem.toTodoItemEntity(): TodoItemEntity {
         iconIdentifier = this.iconIdentifier
     )
 }
+
+fun TodoItem.toTodoItemEntityWithId(): TodoItemEntity {
+    return TodoItemEntity(
+        id = this.id,
+        body = this.body,
+        title = this.title,
+        dueDateLong = this.dueDate,
+        completed = this.isCompleted,
+        dueDateString = this.dueDateString,
+        iconIdentifier = this.iconIdentifier
+    )
+}
