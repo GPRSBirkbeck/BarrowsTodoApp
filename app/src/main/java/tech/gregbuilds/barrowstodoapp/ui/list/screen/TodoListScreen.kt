@@ -16,12 +16,16 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowUpward
+import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -30,6 +34,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -50,7 +55,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight.Companion.Medium
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -74,9 +78,10 @@ fun TodoListScreen(
     onAddClicked: () -> Unit,
     onItemClicked: (Int) -> Unit
 ) {
-    val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+    val uiState by viewModel.uiState.collectAsState()
+    val searchText by viewModel.searchQuery.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     var hasNotificationPermission by remember { mutableStateOf(false) }
 
@@ -164,7 +169,106 @@ fun TodoListScreen(
                     .fillMaxSize()
                     .padding(innerPadding)
             ) {
-                val (reorderIcon, sortingText, itemList, addButton, addTestButton, showLoading, noItemsCard) = createRefs()
+                val (searchBar, itemList, addButton, addTestButton, showLoading, noItemsCard) = createRefs()
+
+                when (uiState) {
+                    is TodoListUiState.Success,
+                    TodoListUiState.None -> {
+                        Card(
+                            shape = RoundedCornerShape(8.dp),
+                            elevation = CardDefaults.cardElevation(
+                                defaultElevation = 8.dp
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 12.dp, vertical = 8.dp)
+                                .constrainAs(searchBar) {
+                                    top.linkTo(parent.top)
+                                    start.linkTo(parent.start)
+                                    end.linkTo(parent.end)
+                                },
+                            colors = CardDefaults.cardColors(
+                                containerColor = if (isSystemInDarkTheme()) Color.Black else Color.White,
+                            )
+                        ) {
+                            ConstraintLayout(
+                                modifier = Modifier
+                                    .wrapContentHeight()
+                                    .fillMaxWidth()
+                            ) {
+                                val (searchIcon, searchTextField, reorderIcon, reorderText) = createRefs()
+
+                                Icon(
+                                    contentDescription = "search",
+                                    imageVector = Icons.Default.Search,
+                                    tint = MaterialTheme.colorScheme.tertiary,
+                                    modifier = Modifier
+                                        .padding(8.dp)
+                                        .constrainAs(searchIcon) {
+                                            start.linkTo(parent.start)
+                                            end.linkTo(searchTextField.start)
+                                            top.linkTo(searchTextField.top)
+                                            bottom.linkTo(searchTextField.bottom)
+                                        }
+                                )
+                                OutlinedTextField(
+                                    value = searchText,
+                                    onValueChange = { viewModel.updateSearchText(it) },
+                                    placeholder = { Text("Search your todos") },
+                                    modifier = Modifier
+                                        .padding(8.dp)
+                                        .constrainAs(searchTextField) {
+                                            top.linkTo(parent.top)
+                                            bottom.linkTo(reorderText.top)
+                                            end.linkTo(parent.end, margin = 8.dp)
+                                            start.linkTo(searchIcon.end, margin = 8.dp)
+                                            width = Dimension.fillToConstraints
+                                        }
+                                )
+                                val icon = when (viewModel.sortType.collectAsState().value) {
+                                    SortType.ASCENDING -> Icons.Default.ArrowUpward
+                                    SortType.DESCENDING -> Icons.Default.FilterList
+                                    else -> Icons.Default.Menu
+                                }
+                                Icon(
+                                    tint = MaterialTheme.colorScheme.tertiary,
+                                    imageVector = icon,
+                                    contentDescription = "menu",
+                                    modifier = Modifier
+                                        .padding(8.dp)
+                                        .constrainAs(reorderIcon) {
+                                            start.linkTo(searchIcon.start)
+                                            top.linkTo(reorderText.top)
+                                            bottom.linkTo(reorderText.bottom)
+                                        }
+                                        .clickable {
+                                            viewModel.cycleSortType()
+                                        }
+                                )
+                                Text(
+                                    text = when (viewModel.sortType.collectAsState().value) {
+                                        SortType.ASCENDING -> "Ascending order of word frequency"
+                                        SortType.DESCENDING -> "Descending order of word frequency"
+                                        else -> "No sorting - just searching"
+                                    },
+                                    textAlign = TextAlign.Start,
+                                    color = MaterialTheme.colorScheme.secondary,
+                                    modifier = Modifier
+                                        .padding(8.dp)
+                                        .constrainAs(reorderText) {
+                                            start.linkTo(searchTextField.start)
+                                            top.linkTo(searchTextField.bottom)
+                                            bottom.linkTo(parent.bottom)
+                                        }
+                                        .clickable {
+                                            viewModel.cycleSortType()
+                                        }
+                                )
+                            }
+                        }
+                    }
+                    else -> {}
+                }
 
                 when (uiState) {
                     is TodoListUiState.Loading -> {
@@ -188,40 +292,6 @@ fun TodoListScreen(
                     is TodoListUiState.Success -> {
                         // Show the list of items
                         val listItems = (uiState as TodoListUiState.Success).listItems
-                        Card(
-                            shape = RoundedCornerShape(8.dp),
-                            modifier = Modifier
-                                .wrapContentSize()
-                                .constrainAs(reorderIcon) {
-                                    top.linkTo(parent.top, margin = 16.dp)
-                                    start.linkTo(parent.start, margin = 16.dp)
-                                }
-                                .clickable { viewModel.cycleSortType() },
-                            colors = CardDefaults.cardColors(
-                                containerColor = if (isSystemInDarkTheme()) Color.Black else Color.White,
-                            ),
-                            elevation = CardDefaults.cardElevation(
-                                defaultElevation = 8.dp
-                            )
-                        ) {
-                            Row {
-                                Icon(
-                                    tint = MaterialTheme.colorScheme.tertiary,
-                                    imageVector = Icons.Default.Menu,
-                                    contentDescription = "menu",
-                                    modifier = Modifier.padding(8.dp)
-                                )
-                                Text(
-                                    text = when (viewModel.sortType.collectAsState().value) {
-                                        SortType.ASCENDING -> "Ascending order of word frequency"
-                                        SortType.DESCENDING -> "Descending order of word frequency"
-                                        else -> "Remove sorting"
-                                    },
-                                    color = MaterialTheme.colorScheme.secondary,
-                                    modifier = Modifier.padding(8.dp)
-                                )
-                            }
-                        }
 
                         LazyColumn(
                             modifier = Modifier
@@ -230,7 +300,7 @@ fun TodoListScreen(
                                     end.linkTo(parent.end)
                                     start.linkTo(parent.start)
                                     bottom.linkTo(addButton.top)
-                                    top.linkTo(reorderIcon.bottom)
+                                    top.linkTo(searchBar.bottom)
                                     height = Dimension.fillToConstraints
                                 }
                                 .fillMaxSize()

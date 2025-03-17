@@ -25,19 +25,24 @@ class TodoListViewModel @Inject constructor(
     private val _sortType = MutableStateFlow(SortType.NONE)
     val sortType: StateFlow<SortType> = _sortType.asStateFlow()
 
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
+
     init {
         getTodoItems()
     }
 
-    private fun getTodoItems(searchQuery: String = "", ascending: Boolean? = null) {
+    private fun getTodoItems(ascending: Boolean? = null) {
         viewModelScope.launch {
             try {
-                val items = if (ascending != null && searchQuery.isNotEmpty()) {
-                    todoRepository.getTodoItemsOrderedByWordFrequency(searchQuery, ascending)
+                val items = if (searchQuery.value.isNotEmpty() && sortType.value == SortType.NONE) {
+                    todoRepository.searchTodoItems(searchQuery.value)
+                } else if (ascending != null) {
+                    todoRepository.getTodoItemsOrderedByWordFrequency(searchQuery.value, ascending)
                 } else {
                     todoRepository.getTodoItems()
                 }
-                if (items.isEmpty() && searchQuery.isEmpty()) {
+                if (items.isEmpty() && searchQuery.value.isEmpty()) {
                     _uiState.value = TodoListUiState.Empty
                 } else if (items.isEmpty()) {
                     _uiState.value = TodoListUiState.None
@@ -65,9 +70,14 @@ class TodoListViewModel @Inject constructor(
             if (sortType.value != SortType.NONE) {
                 getTodoItems()
             } else {
-                getTodoItems("Sparky", sortType.value == SortType.ASCENDING)
+                getTodoItems(ascending = sortType.value == SortType.ASCENDING)
             }
         }
+    }
+
+    fun updateSearchText(searchText: String) {
+        _searchQuery.value = searchText
+        getTodoItems(ascending =  null)
     }
 
     fun swipeToDeleteItem(id: Int) {

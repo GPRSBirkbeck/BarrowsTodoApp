@@ -79,4 +79,10 @@ class TodoRepositoryImpl @Inject constructor(
             }
         }
     }
+
+    override suspend fun searchTodoItems(searchQuery: String): List<TodoItem> {
+        return withContext(Dispatchers.IO) {
+            todoDao.searchTodoItems(searchQuery).map { it.toTodoItemUi() }
+        }
+    }
 }

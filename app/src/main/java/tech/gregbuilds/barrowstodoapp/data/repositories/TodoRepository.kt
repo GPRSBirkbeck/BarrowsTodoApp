@@ -17,5 +17,7 @@ interface TodoRepository {
     suspend fun addTestData()
 
     suspend fun getTodoItemsOrderedByWordFrequency(word: String, ascending: Boolean): List<TodoItem>
+
+    suspend fun searchTodoItems(searchQuery: String): List<TodoItem>
 }
 

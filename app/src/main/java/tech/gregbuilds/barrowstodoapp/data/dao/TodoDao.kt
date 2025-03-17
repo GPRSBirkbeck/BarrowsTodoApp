@@ -25,4 +25,7 @@ interface TodoDao {
 
     @Query("DELETE FROM todo_items WHERE id = :itemId")
     suspend fun deleteTodoItemById(itemId: Int)
+
+    @Query("SELECT * FROM todo_items WHERE title LIKE '%' || :searchString || '%' OR body LIKE '%' || :searchString || '%'")
+    fun searchTodoItems(searchString: String): List<TodoItemEntity>
 }
