@@ -11,7 +11,6 @@ import tech.gregbuilds.barrowstodoapp.ui.details.viewModel.TodoDetailViewModel
 import tech.gregbuilds.barrowstodoapp.ui.list.screen.TodoListScreen
 import tech.gregbuilds.barrowstodoapp.ui.list.viewModel.TodoListViewModel
 
-//For deeplinks, this is a good refresher: https://developer.android.com/develop/ui/compose/navigation#deeplinks
 @Composable
 fun AppNavHost(navController: NavHostController = rememberNavController()) {
     NavHost(

@@ -9,11 +9,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import tech.gregbuilds.barrowstodoapp.data.repositories.TodoRepositoryImpl
 import tech.gregbuilds.barrowstodoapp.ui.list.state.TodoListUiState
+import tech.gregbuilds.barrowstodoapp.util.TodoNotificationServiceImpl
 import javax.inject.Inject
 
 @HiltViewModel
 class TodoListViewModel @Inject constructor(
-    private val todoRepository: TodoRepositoryImpl
+    private val todoRepository: TodoRepositoryImpl,
+    private val todoNotificationServiceImpl: TodoNotificationServiceImpl
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<TodoListUiState>(TodoListUiState.Loading)
@@ -30,6 +32,11 @@ class TodoListViewModel @Inject constructor(
                 if (items.isEmpty()) {
                     _uiState.value = TodoListUiState.Empty
                 } else {
+                    val itemsDueToday = items.filter { it.daysUntilDue == 0 }
+                    if (itemsDueToday.isNotEmpty()) {
+                        val firstItemDueToday = itemsDueToday.first()
+                        todoNotificationServiceImpl.showNotification(firstItemDueToday)
+                    }
                     _uiState.value = TodoListUiState.Success(items)
                 }
             } catch (e: Exception) {

@@ -58,8 +58,8 @@ The first todo, is to actually break the task down into steps.
 4. Delete to-do items
    1. Add a delete button to the reused creation screen. Check!
    2. Add swipe to delete functionality - check out the repo I made with swipe to delete functionality. Check!
-5. Push notifications:
-   1. Decide if I want to implement this. If yes, make it easy to test in the dataset I'm giving to the tester.
+5. Push notifications: Check!
+   1. Decide if I want to implement this. If yes, make it easy to test in the dataset I'm giving to the tester. Check!
    2. setup service for this - I'll add more details here if I decide to proceed.
 6. If I haven't and I've rushed into building things - add some tests please - even if it's just to show I can write tests ofc.
 7. Make "Basics" production ready:

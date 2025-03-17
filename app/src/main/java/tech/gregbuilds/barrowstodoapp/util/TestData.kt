@@ -15,6 +15,14 @@ object TestData {
                 completed = false,
             ),
             TodoItemEntity(
+                title = "Stock up on olive oil",
+                body = "Pick up some olive oil at Sainsbury's",
+                dueDateString = "Today",
+                dueDateLong = System.currentTimeMillis(), // Today
+                iconIdentifier = TodoIconIdentifier.Cart.name,
+                completed = false,
+            ),
+            TodoItemEntity(
                 title = "Grocery Shopping",
                 body = "Buy milk, eggs, bread, and cheese",
                 dueDateLong = System.currentTimeMillis() + 86400000, // Tomorrow
