@@ -89,10 +89,10 @@ fun TodoDetailScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "Create a new to-do",
                         textAlign = TextAlign.Start,
                         modifier = Modifier.fillMaxWidth(),
-                        color = if (isSystemInDarkTheme()) Color.Black else Color.White
+                        color = if (isSystemInDarkTheme()) Color.Black else Color.White,
+                        text = if (viewModel.isExistingTodo) "Update your to-do" else "Create a new to-do"
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -203,9 +203,9 @@ fun TodoDetailScreen(
                                     ) {
                                         Text(
                                             fontWeight = FontWeight.Bold,
-                                            text = "Let's start with some details",
                                             modifier = Modifier.padding(bottom = 8.dp),
-                                            style = MaterialTheme.typography.titleMedium
+                                            style = MaterialTheme.typography.titleMedium,
+                                            text = if (viewModel.isExistingTodo) "Update your details" else "Let's start with some details"
                                         )
                                         OutlinedTextField(
                                             value = title.value,
@@ -276,7 +276,8 @@ fun TodoDetailScreen(
                                             dismissButton = {
                                                 TextButton(
                                                     onClick = {
-                                                        showDatePicker = false }
+                                                        showDatePicker = false
+                                                    }
                                                 ) {
                                                     Text("Cancel")
                                                 }
@@ -386,8 +387,7 @@ fun TodoDetailScreen(
                                             deleteButton.top,
                                             margin = 4.dp
                                         )
-                                    }
-                                    else {
+                                    } else {
                                         bottom.linkTo(parent.bottom, margin = 8.dp)
                                     }
                                     start.linkTo(parent.start, margin = 16.dp)

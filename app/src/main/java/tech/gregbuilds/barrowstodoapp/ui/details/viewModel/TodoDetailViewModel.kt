@@ -132,10 +132,10 @@ class TodoDetailViewModel @Inject constructor(
                 daysUntilDue = dateFormatterService.getDaysUntilDue(selectedDate.value).toInt(),
                 daysUntilDueDisplay = dateFormatterService.getDaysUntilDueDisplay(selectedDate.value)
             )
-            if (selectedTodoId == null) {
-                todoRepository.insertTodoItem(todoItem.toTodoItemEntity())
-            } else {
+            if (isExistingTodo) {
                 todoRepository.updateTodoItem(todoItem.toTodoItemEntityWithId())
+            } else {
+                todoRepository.insertTodoItem(todoItem.toTodoItemEntity())
             }
             // Emit a navigation event after successful save
             _navigationEvents.emit(NavigationEvent.NavigateBack)
