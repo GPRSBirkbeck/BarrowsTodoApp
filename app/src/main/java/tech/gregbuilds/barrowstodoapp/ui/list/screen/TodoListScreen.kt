@@ -62,9 +62,9 @@ fun TodoListScreen(
                 title = {
                     Text(
                         text = "Your to-dos",
-                        color = if (isSystemInDarkTheme()) Color.Black else Color.White,
                         textAlign = TextAlign.Start,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        color = if (isSystemInDarkTheme()) Color.Black else Color.White
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -108,10 +108,10 @@ fun TodoListScreen(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .constrainAs(showLoading) {
-                                    top.linkTo(parent.top)
-                                    bottom.linkTo(parent.bottom)
-                                    start.linkTo(parent.start)
                                     end.linkTo(parent.end)
+                                    top.linkTo(parent.top)
+                                    start.linkTo(parent.start)
+                                    bottom.linkTo(parent.bottom)
                                 },
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
@@ -128,24 +128,23 @@ fun TodoListScreen(
                                 .padding(vertical = 12.dp)
                                 .constrainAs(itemList) {
                                     top.linkTo(parent.top)
-                                    bottom.linkTo(addButton.top)
-                                    start.linkTo(parent.start)
                                     end.linkTo(parent.end)
-                                    height =
-                                        Dimension.fillToConstraints
+                                    start.linkTo(parent.start)
+                                    bottom.linkTo(addButton.top)
+                                    height = Dimension.fillToConstraints
                                 }
                                 .fillMaxSize()
                         ) {
                             listItems.forEach {
                                 item {
                                     SwipeToDismissListItem(
-                                        onRemove = { id -> viewModel.swipeToDeleteItem(id) },
                                         item = it,
                                         modifier = Modifier.padding(
                                             horizontal = 12.dp,
                                             vertical = 4.dp
                                         ),
-                                        onClick = { onItemClicked(it.id) }
+                                        onClick = { onItemClicked(it.id) },
+                                        onRemove = { id -> viewModel.swipeToDeleteItem(id) }
                                     )
                                 }
                             }
@@ -183,29 +182,31 @@ fun TodoListScreen(
                             )
                         ) {
                             Text(
-                                modifier = Modifier.padding(16.dp).fillMaxWidth(),
+                                modifier = Modifier
+                                    .padding(16.dp)
+                                    .fillMaxWidth(),
+                                textAlign = TextAlign.Center,
                                 text = "No to-dos yet - create one below!",
                                 color = if (isSystemInDarkTheme()) Color.White else Color.Black,
-                                textAlign = TextAlign.Center
                             )
                         }
                     }
                 }
                 if (uiState == TodoListUiState.Empty) {
                     Button(
+                        shape = RoundedCornerShape(8.dp),
                         onClick = { viewModel.addTestData() },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = if (isSystemInDarkTheme()) Color.Black else Color.White,
                             contentColor = MaterialTheme.colorScheme.secondary
                         ),
                         elevation = ButtonDefaults.buttonElevation(
+                            hoveredElevation = 1.0.dp,
                             defaultElevation = 8.0.dp,
                             pressedElevation = 12.0.dp,
                             focusedElevation = 10.0.dp,
-                            hoveredElevation = 1.0.dp,
                             disabledElevation = 0.0.dp
                         ),
-                        shape = RoundedCornerShape(8.dp),
                         modifier = Modifier
                             .constrainAs(addTestButton) {
                                 bottom.linkTo(parent.bottom, margin = 8.dp)
@@ -217,6 +218,7 @@ fun TodoListScreen(
                 }
                 Button(
                     onClick = { onAddClicked() },
+                    shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.secondary
                     ),
@@ -227,7 +229,6 @@ fun TodoListScreen(
                         hoveredElevation = 1.0.dp,
                         disabledElevation = 0.0.dp
                     ),
-                    shape = RoundedCornerShape(8.dp),
                     modifier = Modifier
                         .constrainAs(addButton) {
                             bottom.linkTo(parent.bottom, margin = 8.dp)

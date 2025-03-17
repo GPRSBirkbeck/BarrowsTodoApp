@@ -13,12 +13,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import tech.gregbuilds.barrowstodoapp.theme.DismissRed
 
 @Composable
 fun DismissBackground(dismissState: SwipeToDismissBoxState) {
     val color = when (dismissState.dismissDirection) {
-        SwipeToDismissBoxValue.EndToStart -> Color(0xFFFF1744)
-        SwipeToDismissBoxValue.Settled -> Color.Transparent
+        SwipeToDismissBoxValue.EndToStart -> DismissRed
         else -> Color.Transparent
     }
 

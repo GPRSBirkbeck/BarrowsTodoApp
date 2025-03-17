@@ -56,7 +56,7 @@ class TodoListViewModel @Inject constructor(
         }
     }
 
-    // kept as a separate function to allow expansion in the future - it does look like duplication for now - sorry.
+    // Kept as a separate function to allow expansion in the future - it does look like duplication for now - sorry.
     private fun refreshData() {
         getTodoItems()
     }

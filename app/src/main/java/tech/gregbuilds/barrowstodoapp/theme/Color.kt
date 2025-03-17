@@ -9,3 +9,5 @@ val Amber300 = Color(0xFFFFD54F)
 val TealA700 = Color(0xFF00BFA5)
 val Indigo700 = Color(0xFF303F9F)
 val Amber500 = Color(0xFFFFC107)
+
+val DismissRed = Color(0xFFFF1744)

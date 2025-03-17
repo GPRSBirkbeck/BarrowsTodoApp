@@ -1,7 +1,5 @@
 package tech.gregbuilds.barrowstodoapp.model
 
-import androidx.compose.ui.graphics.vector.ImageVector
-
 // Kept this separate from the database model to separate concerns and improve testability.
 // Also allows for changes if needed it the future
 data class TodoItem(

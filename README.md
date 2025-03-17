@@ -84,7 +84,7 @@ The first todo, is to actually break the task down into steps.
    10. Set up push notifications for items expiring today.
    11. Check threading one more time. Done.
    12. Make it clear in commit history now that basics are complete.
-   13. Clear up TODOs.
+   13. Clear up TODOs. Done.
 
 "Extended" steps:
 1. Search through all the titles of their to-dos

@@ -20,9 +20,9 @@ interface TodoDao {
     @Insert
     fun insertTodoItem(item: TodoItemEntity)
 
-    @Query("DELETE FROM todo_items WHERE id = :itemId")
-    suspend fun deleteTodoItemById(itemId: Int)
-
     @Insert
     fun insertAll(todoItems: List<TodoItemEntity>)
+
+    @Query("DELETE FROM todo_items WHERE id = :itemId")
+    suspend fun deleteTodoItemById(itemId: Int)
 }

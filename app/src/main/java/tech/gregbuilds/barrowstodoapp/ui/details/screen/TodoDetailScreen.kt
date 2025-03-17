@@ -75,6 +75,7 @@ fun TodoDetailScreen(
 
     LaunchedEffect(key1 = Unit) {
         viewModel.navigationEvents.collectLatest { event ->
+            //When block might seem silly but it's quite likely we'll want more navigations from the detail screen.
             when (event) {
                 is NavigationEvent.NavigateBack -> {
                     goBack()
@@ -84,15 +85,14 @@ fun TodoDetailScreen(
     }
 
     Scaffold(
-        modifier = Modifier.background(color = Color(0xFFECEFF1)),
         topBar = {
             TopAppBar(
                 title = {
                     Text(
                         text = "Create a new to-do",
-                        color = if (isSystemInDarkTheme()) Color.Black else Color.White,
                         textAlign = TextAlign.Start,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        color = if (isSystemInDarkTheme()) Color.Black else Color.White
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -101,8 +101,8 @@ fun TodoDetailScreen(
                 navigationIcon = {
                     IconButton(onClick = goBack) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             tint = if (isSystemInDarkTheme()) Color.Black else Color.White
                         )
                     }
@@ -114,10 +114,10 @@ fun TodoDetailScreen(
         Box(modifier = Modifier.fillMaxSize()) {
             // Background Image
             Image(
-                painter = painterResource(id = R.drawable.list_background),
-                contentDescription = "Background Image",
+                contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
+                contentDescription = "Background Image",
+                painter = painterResource(id = R.drawable.list_background)
             )
             ConstraintLayout(
                 modifier = Modifier
@@ -147,10 +147,10 @@ fun TodoDetailScreen(
                     }
 
                     is TodoDetailsUiState.Success -> {
-                        val title = viewModel.title.collectAsState()
                         val body = viewModel.body.collectAsState()
+                        val title = viewModel.title.collectAsState()
+                        val dueDateString = viewModel.dueDateString.collectAsState()
                         val selectedIcon = viewModel.selectedIcon.collectAsState()
-                        var showDatePicker by remember { mutableStateOf(false) }
                         val buttonElevation = ButtonDefaults.buttonElevation(
                             defaultElevation = 8.0.dp,
                             pressedElevation = 12.0.dp,
@@ -158,6 +158,8 @@ fun TodoDetailScreen(
                             hoveredElevation = 1.0.dp,
                             disabledElevation = 0.0.dp
                         )
+
+                        var showDatePicker by remember { mutableStateOf(false) }
 
                         val datePickerState =
                             rememberDatePickerState(
@@ -169,13 +171,14 @@ fun TodoDetailScreen(
                                     }
                                 }
                             )
+
                         LazyColumn(
                             modifier = Modifier
                                 .constrainAs(lazyColumn) {
                                     top.linkTo(parent.top)
-                                    bottom.linkTo(saveButton.top)
-                                    start.linkTo(parent.start)
                                     end.linkTo(parent.end)
+                                    start.linkTo(parent.start)
+                                    bottom.linkTo(saveButton.top)
                                     height = Dimension.fillToConstraints
                                 }
                                 .fillMaxSize(),
@@ -188,12 +191,10 @@ fun TodoDetailScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(16.dp),
+                                    elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
                                     colors = CardDefaults.cardColors(
                                         containerColor = if (isSystemInDarkTheme()) Color.Black else Color.White
                                     ),
-                                    elevation = CardDefaults.cardElevation(
-                                        defaultElevation = 8.dp
-                                    )
                                 ) {
                                     Column(
                                         modifier = Modifier
@@ -201,23 +202,23 @@ fun TodoDetailScreen(
                                             .padding(16.dp)
                                     ) {
                                         Text(
-                                            text = "Let's start with some details",
-                                            style = MaterialTheme.typography.titleMedium,
                                             fontWeight = FontWeight.Bold,
-                                            modifier = Modifier.padding(bottom = 8.dp)
+                                            text = "Let's start with some details",
+                                            modifier = Modifier.padding(bottom = 8.dp),
+                                            style = MaterialTheme.typography.titleMedium
                                         )
                                         OutlinedTextField(
                                             value = title.value,
-                                            onValueChange = { viewModel.updateTitle(it) },
                                             label = { Text("Title") },
+                                            onValueChange = { viewModel.updateTitle(it) },
                                             modifier = Modifier
                                                 .fillMaxWidth()
                                                 .padding(bottom = 8.dp)
                                         )
                                         OutlinedTextField(
                                             value = body.value,
-                                            onValueChange = { viewModel.updateBody(it) },
                                             label = { Text("Body") },
+                                            onValueChange = { viewModel.updateBody(it) },
                                             modifier = Modifier.fillMaxWidth()
                                         )
                                     }
@@ -229,11 +230,9 @@ fun TodoDetailScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(16.dp),
+                                    elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
                                     colors = CardDefaults.cardColors(
                                         containerColor = if (isSystemInDarkTheme()) Color.Black else Color.White
-                                    ),
-                                    elevation = CardDefaults.cardElevation(
-                                        defaultElevation = 8.dp
                                     )
                                 ) {
                                     Column(
@@ -243,35 +242,42 @@ fun TodoDetailScreen(
                                     ) {
                                         Text(
                                             text = "When's this due?",
-                                            style = MaterialTheme.typography.titleMedium,
                                             fontWeight = FontWeight.Bold,
-                                            modifier = Modifier.padding(bottom = 8.dp)
+                                            modifier = Modifier.padding(bottom = 8.dp),
+                                            style = MaterialTheme.typography.titleMedium
                                         )
                                         Button(
-                                            onClick = { showDatePicker = !showDatePicker },
                                             elevation = buttonElevation,
                                             shape = RoundedCornerShape(8.dp),
+                                            modifier = Modifier.fillMaxWidth(),
+                                            onClick = { showDatePicker = !showDatePicker },
                                             colors = ButtonDefaults.buttonColors(
                                                 containerColor = MaterialTheme.colorScheme.secondary
                                             ),
-                                            modifier = Modifier.fillMaxWidth()
                                         ) {
-                                            Text(text = viewModel.dueDateString.collectAsState().value.ifEmpty { "Select due date" })
+                                            Text(
+                                                text = dueDateString.value.ifEmpty { "Select due date" }
+                                            )
                                         }
                                     }
                                     if (showDatePicker) {
                                         DatePickerDialog(
                                             onDismissRequest = { showDatePicker = false },
                                             confirmButton = {
-                                                TextButton(onClick = {
-                                                    showDatePicker = false
-                                                    viewModel.updateSelectedDate(datePickerState.selectedDateMillis)
-                                                }) {
+                                                TextButton(
+                                                    onClick = {
+                                                        showDatePicker = false
+                                                        viewModel.updateSelectedDate(datePickerState.selectedDateMillis)
+                                                    }
+                                                ) {
                                                     Text("OK")
                                                 }
                                             },
                                             dismissButton = {
-                                                TextButton(onClick = { showDatePicker = false }) {
+                                                TextButton(
+                                                    onClick = {
+                                                        showDatePicker = false }
+                                                ) {
                                                     Text("Cancel")
                                                 }
                                             }
@@ -287,11 +293,9 @@ fun TodoDetailScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(16.dp),
+                                    elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
                                     colors = CardDefaults.cardColors(
-                                        containerColor = if (isSystemInDarkTheme()) Color.Black else  Color.White
-                                    ),
-                                    elevation = CardDefaults.cardElevation(
-                                        defaultElevation = 8.dp
+                                        containerColor = if (isSystemInDarkTheme()) Color.Black else Color.White
                                     )
                                 ) {
                                     Column(
@@ -306,9 +310,9 @@ fun TodoDetailScreen(
                                             modifier = Modifier.padding(bottom = 8.dp)
                                         )
                                         val icons = listOf(
+                                            TodoIconIdentifier.Calendar,
                                             TodoIconIdentifier.Alarm,
                                             TodoIconIdentifier.Book,
-                                            TodoIconIdentifier.Calendar,
                                             TodoIconIdentifier.Cart,
                                             TodoIconIdentifier.Home,
                                             TodoIconIdentifier.Work
@@ -342,17 +346,26 @@ fun TodoDetailScreen(
                             onClick = {
                                 viewModel.saveTodoItem()
                             },
-                            colors = ButtonDefaults.buttonColors(
-                                disabledContainerColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.5f),
-                                containerColor = MaterialTheme.colorScheme.secondary,
-                                disabledContentColor = if (isSystemInDarkTheme()) Color.Black else Color.White
-                            ),
+
                             shape = RoundedCornerShape(8.dp),
                             enabled = viewModel.isSaveEnabled.collectAsState().value,
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.secondary,
+                                disabledContentColor = if (isSystemInDarkTheme()) Color.Black else Color.White,
+                                disabledContainerColor = MaterialTheme.colorScheme.secondary.copy(
+                                    alpha = 0.5f
+                                )
+                            ),
                             modifier = Modifier
                                 .constrainAs(saveButton) {
-                                    if (viewModel.isExistingTodo) bottom.linkTo(deleteButton.top, margin = 8.dp)
-                                    else bottom.linkTo(parent.bottom, margin = 16.dp)
+                                    if (viewModel.isExistingTodo) {
+                                        bottom.linkTo(
+                                            deleteButton.top,
+                                            margin = 4.dp
+                                        )
+                                    } else {
+                                        bottom.linkTo(parent.bottom, margin = 8.dp)
+                                    }
                                     end.linkTo(parent.end, margin = 16.dp)
                                 },
                             elevation = buttonElevation,
@@ -368,8 +381,15 @@ fun TodoDetailScreen(
                             shape = RoundedCornerShape(8.dp),
                             modifier = Modifier
                                 .constrainAs(cancelButton) {
-                                    if (viewModel.isExistingTodo) bottom.linkTo(deleteButton.top, margin = 8.dp)
-                                    else bottom.linkTo(parent.bottom, margin = 16.dp)
+                                    if (viewModel.isExistingTodo) {
+                                        bottom.linkTo(
+                                            deleteButton.top,
+                                            margin = 4.dp
+                                        )
+                                    }
+                                    else {
+                                        bottom.linkTo(parent.bottom, margin = 8.dp)
+                                    }
                                     start.linkTo(parent.start, margin = 16.dp)
                                 }
                         ) {
@@ -378,18 +398,18 @@ fun TodoDetailScreen(
 
                         if (viewModel.isExistingTodo) {
                             Button(
-                                onClick = {
-                                    viewModel.deleteTodoItem()
-                                },
                                 elevation = buttonElevation,
+                                onClick = { viewModel.deleteTodoItem() },
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = MaterialTheme.colorScheme.error
                                 ),
                                 shape = RoundedCornerShape(8.dp),
                                 modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp)
                                     .constrainAs(deleteButton) {
                                         start.linkTo(parent.start, margin = 16.dp)
-                                        bottom.linkTo(parent.bottom, margin = 16.dp)
+                                        bottom.linkTo(parent.bottom, margin = 8.dp)
                                         end.linkTo(parent.end, margin = 16.dp)
                                     }
                             ) {

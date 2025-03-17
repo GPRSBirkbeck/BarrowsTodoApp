@@ -21,6 +21,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import tech.gregbuilds.barrowstodoapp.model.TodoIconIdentifier
 import tech.gregbuilds.barrowstodoapp.model.TodoItem
+import tech.gregbuilds.barrowstodoapp.theme.DismissRed
 
 @Composable
 fun TodoItemRow(
@@ -46,19 +47,14 @@ fun TodoItemRow(
                 .padding(8.dp)
         ) {
             val (icon, title, body, dueDate, daysUntilDue) = createRefs()
-            createVerticalChain(
-                title,
-                body,
-                dueDate,
-                chainStyle = androidx.constraintlayout.compose.ChainStyle.Packed
-            )
+            createVerticalChain(title, body, dueDate, chainStyle = androidx.constraintlayout.compose.ChainStyle.Packed)
 
-            val overdueColor = if (item.daysUntilDue < 0) Color.Red else Color.Unspecified
+            val overdueColor = if (item.daysUntilDue < 0) DismissRed else Color.Unspecified
 
             Icon(
-                tint = if (item.daysUntilDue < 0) Color.Red else MaterialTheme.colorScheme.secondary,
-                imageVector = TodoIconIdentifier.fromIdentifier(item.iconIdentifier).icon,
                 contentDescription = "Todo Item Icon",
+                imageVector = TodoIconIdentifier.fromIdentifier(item.iconIdentifier).icon,
+                tint = if (item.daysUntilDue < 0) Color.Red else MaterialTheme.colorScheme.secondary,
                 modifier = Modifier
                     .size(32.dp)
                     .constrainAs(icon) {
@@ -69,10 +65,10 @@ fun TodoItemRow(
             )
 
             Text(
-                text = item.title,
-                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
                 maxLines = 1,
+                text = item.title,
                 overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
                 modifier = Modifier
                     .constrainAs(title) {
                         top.linkTo(parent.top)
@@ -83,9 +79,9 @@ fun TodoItemRow(
             )
 
             Text(
+                maxLines = 2,
                 text = item.body,
                 style = MaterialTheme.typography.bodyMedium,
-                maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
                     .constrainAs(body) {
