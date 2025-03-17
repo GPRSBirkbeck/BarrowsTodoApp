@@ -43,12 +43,12 @@ The first todo, is to actually break the task down into steps.
    3. make icon red for a to-do item has passed its deadline (play around and see what I like the look of most) Check!
    4. add a days until due subtitle. Check!
 3. Update to-do items
-   1. Make the to-do items clickable.
-   2. Upon clicking, reuse the creation screen, and allow the user to update the fields
-   3. Add a save button to the bottom, which only becomes enabled once the user has made a change
+   1. Make the to-do items clickable. Check!
+   2. Upon clicking, reuse the creation screen, and allow the user to update the fields. Check!
+   3. Add a save button to the bottom, which only becomes enabled once the user has made a change. Check!
 4. Delete to-do items
-   1. Add a delete button to the reused creation screen - check!
-   2. Add swipe to delete functionality - check out the repo I made with swipe to delete functionality - check!
+   1. Add a delete button to the reused creation screen. Check!
+   2. Add swipe to delete functionality - check out the repo I made with swipe to delete functionality. Check!
 5. Push notifications:
    1. Decide if I want to implement this. If yes, make it easy to test in the dataset I'm giving to the tester.
    2. setup service for this - I'll add more details here if I decide to proceed.
