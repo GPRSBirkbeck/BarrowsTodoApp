@@ -15,5 +15,7 @@ interface TodoRepository {
     suspend fun deleteTodoItem(id: Int)
 
     suspend fun addTestData()
+
+    suspend fun getTodoItemsOrderedByWordFrequency(word: String, ascending: Boolean): List<TodoItem>
 }
 

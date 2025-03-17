@@ -7,22 +7,28 @@ import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -44,6 +50,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight.Companion.Medium
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -55,6 +62,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import kotlinx.coroutines.launch
 import tech.gregbuilds.barrowstodoapp.R
 import tech.gregbuilds.barrowstodoapp.ui.composables.SwipeToDismissListItem
+import tech.gregbuilds.barrowstodoapp.ui.list.state.SortType
 import tech.gregbuilds.barrowstodoapp.ui.list.state.TodoListUiState
 import tech.gregbuilds.barrowstodoapp.ui.list.viewModel.TodoListViewModel
 
@@ -156,7 +164,7 @@ fun TodoListScreen(
                     .fillMaxSize()
                     .padding(innerPadding)
             ) {
-                val (itemList, addButton, addTestButton, showLoading, noItemsCard) = createRefs()
+                val (reorderIcon, sortingText, itemList, addButton, addTestButton, showLoading, noItemsCard) = createRefs()
 
                 when (uiState) {
                     is TodoListUiState.Loading -> {
@@ -180,20 +188,55 @@ fun TodoListScreen(
                     is TodoListUiState.Success -> {
                         // Show the list of items
                         val listItems = (uiState as TodoListUiState.Success).listItems
+                        Card(
+                            shape = RoundedCornerShape(8.dp),
+                            modifier = Modifier
+                                .wrapContentSize()
+                                .constrainAs(reorderIcon) {
+                                    top.linkTo(parent.top, margin = 16.dp)
+                                    start.linkTo(parent.start, margin = 16.dp)
+                                }
+                                .clickable { viewModel.cycleSortType() },
+                            colors = CardDefaults.cardColors(
+                                containerColor = if (isSystemInDarkTheme()) Color.Black else Color.White,
+                            ),
+                            elevation = CardDefaults.cardElevation(
+                                defaultElevation = 8.dp
+                            )
+                        ) {
+                            Row {
+                                Icon(
+                                    tint = MaterialTheme.colorScheme.tertiary,
+                                    imageVector = Icons.Default.Menu,
+                                    contentDescription = "menu",
+                                    modifier = Modifier.padding(8.dp)
+                                )
+                                Text(
+                                    text = when (viewModel.sortType.collectAsState().value) {
+                                        SortType.ASCENDING -> "Ascending order of word frequency"
+                                        SortType.DESCENDING -> "Descending order of word frequency"
+                                        else -> "Remove sorting"
+                                    },
+                                    color = MaterialTheme.colorScheme.secondary,
+                                    modifier = Modifier.padding(8.dp)
+                                )
+                            }
+                        }
+
                         LazyColumn(
                             modifier = Modifier
                                 .padding(vertical = 12.dp)
                                 .constrainAs(itemList) {
-                                    top.linkTo(parent.top)
                                     end.linkTo(parent.end)
                                     start.linkTo(parent.start)
                                     bottom.linkTo(addButton.top)
+                                    top.linkTo(reorderIcon.bottom)
                                     height = Dimension.fillToConstraints
                                 }
                                 .fillMaxSize()
                         ) {
-                            listItems.forEach {
-                                item {
+                            items(listItems, key = { listItem -> listItem.id }) {
+                                Row(Modifier.animateItem()) {
                                     SwipeToDismissListItem(
                                         item = it,
                                         modifier = Modifier.padding(
@@ -244,6 +287,35 @@ fun TodoListScreen(
                                     .fillMaxWidth(),
                                 textAlign = TextAlign.Center,
                                 text = "No to-dos yet - create one below!",
+                                color = if (isSystemInDarkTheme()) Color.White else Color.Black,
+                            )
+                        }
+                    }
+                    TodoListUiState.None -> {
+                        Card(
+                            modifier = Modifier
+                                .wrapContentSize()
+                                .padding(16.dp)
+                                .constrainAs(noItemsCard) {
+                                    top.linkTo(parent.top)
+                                    bottom.linkTo(addButton.top)
+                                    start.linkTo(parent.start)
+                                    end.linkTo(parent.end)
+                                },
+                            shape = RoundedCornerShape(8.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = if (isSystemInDarkTheme()) Color.Black else Color.White,
+                            ),
+                            elevation = CardDefaults.cardElevation(
+                                defaultElevation = 8.dp
+                            )
+                        ) {
+                            Text(
+                                modifier = Modifier
+                                    .padding(16.dp)
+                                    .fillMaxWidth(),
+                                textAlign = TextAlign.Center,
+                                text = "No to-dos found with your filter",
                                 color = if (isSystemInDarkTheme()) Color.White else Color.Black,
                             )
                         }

@@ -8,6 +8,8 @@ import tech.gregbuilds.barrowstodoapp.model.TodoItem
 import tech.gregbuilds.barrowstodoapp.util.TestData
 import tech.gregbuilds.barrowstodoapp.util.toTodoItemUi
 import javax.inject.Inject
+import kotlin.text.equals
+import kotlin.text.split
 
 class TodoRepositoryImpl @Inject constructor(
     private val todoDao: TodoDao
@@ -49,6 +51,32 @@ class TodoRepositoryImpl @Inject constructor(
     override suspend fun addTestData() {
         withContext(Dispatchers.IO) {
             todoDao.insertAll(TestData.getTodoItems())
+        }
+    }
+
+    override suspend fun getTodoItemsOrderedByWordFrequency(
+        word: String,
+        ascending: Boolean
+    ): List<TodoItem> {
+        return withContext(Dispatchers.IO) {
+            val items = todoDao.getTodoItems().map { it.toTodoItemUi() }
+            if (ascending) {
+                items.sortedBy { item ->
+                    val titleFrequency =
+                        item.title.split(Regex("\\s+")).count { it.equals(word, ignoreCase = true) }
+                    val bodyFrequency =
+                        item.body.split(Regex("\\s+")).count { it.equals(word, ignoreCase = true) }
+                    titleFrequency + bodyFrequency
+                }
+            } else {
+                items.sortedByDescending { item ->
+                    val titleFrequency =
+                        item.title.split(Regex("\\s+")).count { it.equals(word, ignoreCase = true) }
+                    val bodyFrequency =
+                        item.body.split(Regex("\\s+")).count { it.equals(word, ignoreCase = true) }
+                    titleFrequency + bodyFrequency
+                }
+            }
         }
     }
 }
