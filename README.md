@@ -11,6 +11,7 @@ This app is a to-do app, built for Barrows.
 To use this app, install android studio and then wait for your build to complete.
 Next, attach a device or create an emulator, and click the green "Run" button.
 Once the app is up and running, click "Create a To-do item" in the bottom right.
+Alternatively, click "Populate with test data" to see some example To-do items (this button is hidden if the list is not empty).
 This will bring the To-do creation screen into the foreground.
 Here you will need to add a title, body, select an icon, and select a due date before you can create a To-do item.
 Upon creating the To-do item, you will be brought back to the list screen. Here you can see all of your To-do items.
