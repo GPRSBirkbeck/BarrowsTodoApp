@@ -61,7 +61,7 @@ dependencies {
     implementation(libs.androidx.material)
     implementation(libs.androidx.material3)
 
-    // Material Icons //TODO think about removing and going fully to material3 icons.
+    // Material Icons //With more time I might think about removing and going fully to material3 icons.
     implementation(libs.androidx.material.icons.core)
     implementation(libs.androidx.material.icons.extended)
 

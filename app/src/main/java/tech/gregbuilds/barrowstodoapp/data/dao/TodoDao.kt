@@ -6,7 +6,6 @@ import androidx.room.Query
 import androidx.room.Update
 import tech.gregbuilds.barrowstodoapp.data.model.TodoItemEntity
 
-//TODO double check documentation on best practices here
 @Dao
 interface TodoDao {
     @Query("SELECT * FROM todo_items")

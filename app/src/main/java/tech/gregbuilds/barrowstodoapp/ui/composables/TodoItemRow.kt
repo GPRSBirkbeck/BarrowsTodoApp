@@ -30,11 +30,10 @@ fun TodoItemRow(
 ) {
     Card(
         colors = CardColors(
-            //TODO clean these up
-            containerColor = if (isSystemInDarkTheme()) Color.Black else Color.White,
             contentColor = MaterialTheme.colorScheme.onSurface,
+            containerColor = if (isSystemInDarkTheme()) Color.Black else Color.White,
             disabledContentColor = if (isSystemInDarkTheme()) Color.Black else Color.White,
-            disabledContainerColor = if (isSystemInDarkTheme()) Color.Black else Color.White,
+            disabledContainerColor = if (isSystemInDarkTheme()) Color.Black else Color.White
         ),
         modifier = modifier
             .fillMaxWidth()
