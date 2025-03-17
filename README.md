@@ -76,7 +76,7 @@ The first todo, is to actually break the task down into steps.
    3. Think about the domain layer one more time - I could add useCases, but this feels like overkill.
    4. review gradle - do I have any unneeded dependencies? Not sure this matters for this task.
    5. Add instructions on how to use this app into this README (also check for punctuation - I don't care if I end lines with dots, just make it consistent). Done"
-   6. Add a datastore of test/dummy data for the assessor to use - I think for this, maybe just have a button they can click to populate the list. Hide the button if the list is not empty.
+   6. Add a datastore of test/dummy data for the assessor to use - I think for this, maybe just have a button they can click to populate the list. Hide the button if the list is not empty. Done!
    7. Reread the instructions one more time, did I do what they asked for?
    8. Check threading one more time. Done.
    9. Make it clear in commit history now that basics are complete.

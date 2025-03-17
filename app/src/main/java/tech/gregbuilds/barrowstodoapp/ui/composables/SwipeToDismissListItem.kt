@@ -10,7 +10,6 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import tech.gregbuilds.barrowstodoapp.model.TodoItem
-import tech.gregbuilds.barrowstodoapp.ui.details.TodoItemRow
 
 @Composable
 fun SwipeToDismissListItem(

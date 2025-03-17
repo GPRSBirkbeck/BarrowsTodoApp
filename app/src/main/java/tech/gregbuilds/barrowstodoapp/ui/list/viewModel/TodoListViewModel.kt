@@ -49,6 +49,13 @@ class TodoListViewModel @Inject constructor(
         refreshData()
     }
 
+    fun addTestData() {
+        viewModelScope.launch {
+            todoRepository.addTestData()
+            getTodoItems()
+        }
+    }
+
     // kept as a separate function to allow expansion in the future - it does look like duplication for now - sorry.
     private fun refreshData() {
         getTodoItems()

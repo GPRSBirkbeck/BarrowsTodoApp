@@ -2,6 +2,7 @@ package tech.gregbuilds.barrowstodoapp.ui.list.screen
 
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -93,7 +94,7 @@ fun TodoListScreen(
                     .fillMaxSize()
                     .padding(innerPadding)
             ) {
-                val (itemList, addButton, showLoading) = createRefs()
+                val (itemList, addButton, addTestButton, showLoading) = createRefs()
 
                 when (uiState) {
                     is TodoListUiState.Loading -> {
@@ -135,7 +136,10 @@ fun TodoListScreen(
                                     SwipeToDismissListItem(
                                         onRemove = { id -> viewModel.swipeToDeleteItem(id) },
                                         item = it,
-                                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
+                                        modifier = Modifier.padding(
+                                            horizontal = 12.dp,
+                                            vertical = 4.dp
+                                        ),
                                         onClick = { onItemClicked(it.id) }
                                     )
                                 }
@@ -159,6 +163,30 @@ fun TodoListScreen(
                             text = "No items found",
                             modifier = Modifier.padding(16.dp)
                         )
+                    }
+                }
+                if (uiState == TodoListUiState.Empty) {
+                    Button(
+                        onClick = { viewModel.addTestData() },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = if (isSystemInDarkTheme()) Color.Black else Color.White,
+                            contentColor = MaterialTheme.colorScheme.secondary
+                        ),
+                        elevation = ButtonDefaults.buttonElevation(
+                            defaultElevation = 8.0.dp,
+                            pressedElevation = 12.0.dp,
+                            focusedElevation = 10.0.dp,
+                            hoveredElevation = 1.0.dp,
+                            disabledElevation = 0.0.dp
+                        ),
+                        shape = RoundedCornerShape(8.dp),
+                        modifier = Modifier
+                            .constrainAs(addTestButton) {
+                                bottom.linkTo(parent.bottom, margin = 16.dp)
+                                start.linkTo(parent.start, margin = 16.dp)
+                            }
+                    ) {
+                        Text("Populate with test data")
                     }
                 }
                 Button(

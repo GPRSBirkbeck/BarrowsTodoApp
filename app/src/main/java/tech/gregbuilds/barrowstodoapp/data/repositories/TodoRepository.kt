@@ -14,5 +14,7 @@ interface TodoRepository {
 
     suspend fun deleteTodoItem(id: Int)
 
+    suspend fun addTestData()
+
 }
 
