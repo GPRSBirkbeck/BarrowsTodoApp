@@ -53,7 +53,7 @@ class TodoDetailViewModel @Inject constructor(
     val isSaveEnabled: StateFlow<Boolean> = _isSaveEnabled.asStateFlow()
 
     private val _dueDateString = MutableStateFlow("")
-    private val dueDateString: StateFlow<String> = _dueDateString.asStateFlow()
+    val dueDateString: StateFlow<String> = _dueDateString.asStateFlow()
 
 
     var isExistingTodo: Boolean by mutableStateOf(false)
@@ -117,7 +117,7 @@ class TodoDetailViewModel @Inject constructor(
         }
     }
 
-    //TODO add use cases
+    //In a production project I would add use cases for our domain layer.
     fun saveTodoItem() {
         viewModelScope.launch {
             val todoItem = TodoItem(

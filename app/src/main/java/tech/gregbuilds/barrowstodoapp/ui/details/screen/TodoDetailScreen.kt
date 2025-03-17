@@ -256,7 +256,7 @@ fun TodoDetailScreen(
                                             ),
                                             modifier = Modifier.fillMaxWidth()
                                         ) {
-                                            Text(text = "Select Due Date")
+                                            Text(text = viewModel.dueDateString.collectAsState().value.ifEmpty { "Select due date" })
                                         }
                                     }
                                     if (showDatePicker) {
