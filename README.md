@@ -78,9 +78,13 @@ The first todo, is to actually break the task down into steps.
    4. review gradle - do I have any unneeded dependencies? Not sure this matters for this task.
    5. Add instructions on how to use this app into this README (also check for punctuation - I don't care if I end lines with dots, just make it consistent). Done"
    6. Add a datastore of test/dummy data for the assessor to use - I think for this, maybe just have a button they can click to populate the list. Hide the button if the list is not empty. Done!
-   7. Reread the instructions one more time, did I do what they asked for?
-   8. Check threading one more time. Done.
-   9. Make it clear in commit history now that basics are complete.
+   7. Reread the instructions one more time, did I do what they asked for? yes.
+   8. Block them from entering items with a past due date. Check!
+   9. Test for 10 mins and fix.
+   10. Set up push notifications for items expiring today.
+   11. Check threading one more time. Done.
+   12. Make it clear in commit history now that basics are complete.
+   13. Clear up TODOs.
 
 "Extended" steps:
 1. Search through all the titles of their to-dos
