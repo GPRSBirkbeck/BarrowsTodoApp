@@ -3,6 +3,7 @@ package tech.gregbuilds.barrowstodoapp.ui.details.screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -89,7 +90,7 @@ fun TodoDetailScreen(
                 title = {
                     Text(
                         text = "Create a new to-do",
-                        color = Color.White,
+                        color = if (isSystemInDarkTheme()) Color.Black else Color.White,
                         textAlign = TextAlign.Start,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -102,7 +103,7 @@ fun TodoDetailScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
-                            tint = Color.White
+                            tint = if (isSystemInDarkTheme()) Color.Black else Color.White
                         )
                     }
                 }
@@ -188,7 +189,7 @@ fun TodoDetailScreen(
                                         .fillMaxWidth()
                                         .padding(16.dp),
                                     colors = CardDefaults.cardColors(
-                                        containerColor = Color.White
+                                        containerColor = if (isSystemInDarkTheme()) Color.Black else Color.White
                                     ),
                                     elevation = CardDefaults.cardElevation(
                                         defaultElevation = 8.dp
@@ -229,7 +230,7 @@ fun TodoDetailScreen(
                                         .fillMaxWidth()
                                         .padding(16.dp),
                                     colors = CardDefaults.cardColors(
-                                        containerColor = Color.White
+                                        containerColor = if (isSystemInDarkTheme()) Color.Black else Color.White
                                     ),
                                     elevation = CardDefaults.cardElevation(
                                         defaultElevation = 8.dp
@@ -287,7 +288,7 @@ fun TodoDetailScreen(
                                         .fillMaxWidth()
                                         .padding(16.dp),
                                     colors = CardDefaults.cardColors(
-                                        containerColor = Color.White
+                                        containerColor = if (isSystemInDarkTheme()) Color.Black else  Color.White
                                     ),
                                     elevation = CardDefaults.cardElevation(
                                         defaultElevation = 8.dp
@@ -322,7 +323,7 @@ fun TodoDetailScreen(
                                                 Icon(
                                                     imageVector = icon.icon,
                                                     contentDescription = icon.name,
-                                                    tint = if (icon == selectedIcon.value) Color.Blue else Color.Gray,
+                                                    tint = if (icon == selectedIcon.value) MaterialTheme.colorScheme.secondary else Color.Gray,
                                                     modifier = Modifier
                                                         .padding(8.dp)
                                                         .size(48.dp)
@@ -343,7 +344,8 @@ fun TodoDetailScreen(
                             },
                             colors = ButtonDefaults.buttonColors(
                                 disabledContainerColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.5f),
-                                containerColor = MaterialTheme.colorScheme.secondary
+                                containerColor = MaterialTheme.colorScheme.secondary,
+                                disabledContentColor = if (isSystemInDarkTheme()) Color.Black else Color.White
                             ),
                             shape = RoundedCornerShape(8.dp),
                             enabled = viewModel.isSaveEnabled.collectAsState().value,

@@ -9,12 +9,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -29,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -57,7 +62,7 @@ fun TodoListScreen(
                 title = {
                     Text(
                         text = "Your to-dos",
-                        color = Color.White,
+                        color = if (isSystemInDarkTheme()) Color.Black else Color.White,
                         textAlign = TextAlign.Start,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -94,7 +99,7 @@ fun TodoListScreen(
                     .fillMaxSize()
                     .padding(innerPadding)
             ) {
-                val (itemList, addButton, addTestButton, showLoading) = createRefs()
+                val (itemList, addButton, addTestButton, showLoading, noItemsCard) = createRefs()
 
                 when (uiState) {
                     is TodoListUiState.Loading -> {
@@ -159,10 +164,31 @@ fun TodoListScreen(
 
                     is TodoListUiState.Empty -> {
                         // Show an empty message
-                        Text(
-                            text = "No items found",
-                            modifier = Modifier.padding(16.dp)
-                        )
+                        Card(
+                            modifier = Modifier
+                                .wrapContentSize()
+                                .padding(16.dp)
+                                .constrainAs(noItemsCard) {
+                                    top.linkTo(parent.top)
+                                    bottom.linkTo(addButton.top)
+                                    start.linkTo(parent.start)
+                                    end.linkTo(parent.end)
+                                },
+                            shape = RoundedCornerShape(8.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = if (isSystemInDarkTheme()) Color.Black else Color.White,
+                            ),
+                            elevation = CardDefaults.cardElevation(
+                                defaultElevation = 8.dp
+                            )
+                        ) {
+                            Text(
+                                modifier = Modifier.padding(16.dp).fillMaxWidth(),
+                                text = "No to-dos yet - create one below!",
+                                color = if (isSystemInDarkTheme()) Color.White else Color.Black,
+                                textAlign = TextAlign.Center
+                            )
+                        }
                     }
                 }
                 if (uiState == TodoListUiState.Empty) {
@@ -182,7 +208,7 @@ fun TodoListScreen(
                         shape = RoundedCornerShape(8.dp),
                         modifier = Modifier
                             .constrainAs(addTestButton) {
-                                bottom.linkTo(parent.bottom, margin = 16.dp)
+                                bottom.linkTo(parent.bottom, margin = 8.dp)
                                 start.linkTo(parent.start, margin = 16.dp)
                             }
                     ) {
@@ -204,7 +230,7 @@ fun TodoListScreen(
                     shape = RoundedCornerShape(8.dp),
                     modifier = Modifier
                         .constrainAs(addButton) {
-                            bottom.linkTo(parent.bottom, margin = 16.dp)
+                            bottom.linkTo(parent.bottom, margin = 8.dp)
                             end.linkTo(parent.end, margin = 16.dp)
                         }
                 ) {
