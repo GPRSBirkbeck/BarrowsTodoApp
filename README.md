@@ -56,12 +56,12 @@ The first todo, is to actually break the task down into steps.
 7. Make "Basics" production ready:
    1. update app icon. Check!
    2. review code:
-      1. when I worked through the steps above, did I opt for speed over best practice?
-      2. How do I feel about the current state of my dependency injection?
-      3. Have a think about my "state" setup - I think this can be improved upon
-      4. Review my packages - could these be simplified?
-      5. Review threading
-      6. How's my unidirectional data flow?
+      1. when I worked through the steps above, did I opt for speed over best practice? Looks good - just missing use cases.
+      2. How do I feel about the current state of my dependency injection? Happy
+      3. Have a think about my "state" setup - I think this can be improved upon. It's good enough.
+      4. Review my packages - could these be simplified? Happy for now.
+      5. Review threading - happy.
+      6. How's my unidirectional data flow? Good.
       7. Check out the AppNavHost one more time.
       8. Check out my use of todo vs. To-do vs Todo naming conventions - I imagine there will be a case or two where these aren't aligned.
       9. Think about renaming it all to task - not Todo - as this might be simpler - have a think.

@@ -8,12 +8,6 @@ import tech.gregbuilds.barrowstodoapp.model.TodoItem
 import tech.gregbuilds.barrowstodoapp.util.toTodoItemUi
 import javax.inject.Inject
 
-/*
- Hey reader, I'm keen to get your take on the approach of injecting the DateFormatterService into the repository
- and then passing it to the toTodoItemUi extension function.
- The other option was to inject the DateFormatterService into a mapping class, but that felt like overkill, and was not making use of extension functions, which are central to kotlin.
-*/
-
 class TodoRepositoryImpl @Inject constructor(
     private val todoDao: TodoDao
 ) : TodoRepository {

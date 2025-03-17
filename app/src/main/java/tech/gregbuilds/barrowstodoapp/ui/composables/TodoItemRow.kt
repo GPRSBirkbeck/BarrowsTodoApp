@@ -1,4 +1,4 @@
-package tech.gregbuilds.barrowstodoapp.ui.details
+package tech.gregbuilds.barrowstodoapp.ui.composables
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
