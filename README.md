@@ -63,8 +63,8 @@ The first todo, is to actually break the task down into steps.
       5. Review threading - happy.
       6. How's my unidirectional data flow? Good.
       7. Check out the AppNavHost one more time. Check!
-      8. Check out my use of todo vs. To-do vs Todo naming conventions - I imagine there will be a case or two where these aren't aligned.
-      9. Think about renaming it all to task - not Todo - as this might be simpler - have a think.
+      8. Check out my use of todo vs. To-do vs Todo naming conventions - I imagine there will be a case or two where these aren't aligned. Check!
+      9. Think about renaming it all to task - not Todo - as this might be simpler - have a think. No - the brief says Todo so I'm matching that.
    3. Think about the domain layer one more time
    4. review gradle - do I have any unneeded dependencies?
    5. Add instructions on how to use this app into this README (also check for punctuation - I don't care if I end lines with dots, just make it consistent). 
