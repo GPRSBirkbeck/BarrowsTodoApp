@@ -34,14 +34,13 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
                 }
             )
         }
-        composable(NavigationItem.TodoDetailScreen.ROUTEWITHID) { backStackEntry ->
-            //TODO look at navController.popBackStack() instead of having a bespoke action for this.
+        // It's possible to remove this duplication at the cost of readability - so given this task I've opted for readability.
+        composable(NavigationItem.TodoDetailScreen.ROUTE_WITH_ID) { backStackEntry ->
             val viewModel = hiltViewModel<TodoDetailViewModel>()
             val id = backStackEntry.arguments?.getString("id")?.toInt()
             TodoDetailScreen(todoId = id, viewModel = viewModel, goBack = { navController.popBackStack() })
         }
-        composable(NavigationItem.TodoDetailScreen.ROUTEWITHOUTID) {
-            //TODO tidy up double instance getting of this viewModel.
+        composable(NavigationItem.TodoDetailScreen.ROUTE_WITHOUT_ID) {
             val viewModel = hiltViewModel<TodoDetailViewModel>()
             TodoDetailScreen(todoId = null, viewModel = viewModel, goBack = { navController.popBackStack() })
         }
