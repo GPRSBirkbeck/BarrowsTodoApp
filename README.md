@@ -20,7 +20,7 @@ When you create an item that is due today you will get an app notification sayin
 When opening the app you will also get this notification, but only once per app session.
 
 For the extended functionality, the user can either:
-1. Search for a To-do item by title or body.
+1. Search for a to-do item by title or body.
 2. Sort the list a word entered into the search bar - either showing the entries that have the word most or least often in their titles and bodies.
 
 ## Some architectural notes
