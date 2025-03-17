@@ -54,7 +54,7 @@ The first todo, is to actually break the task down into steps.
    2. setup service for this - I'll add more details here if I decide to proceed.
 6. If I haven't and I've rushed into building things - add some tests please - even if it's just to show I can write tests ofc.
 7. Make "Basics" production ready:
-   1. update app icon
+   1. update app icon. Check!
    2. review code:
       1. when I worked through the steps above, did I opt for speed over best practice?
       2. How do I feel about the current state of my dependency injection?
